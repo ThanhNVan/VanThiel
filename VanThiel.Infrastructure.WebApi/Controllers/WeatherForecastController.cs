@@ -29,5 +29,38 @@ namespace VanThiel.Infrastructure.WebApi.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("test")]
+        public async ValueTask<IActionResult> TestCancellationTokenAsync(CancellationToken cancellationToken = default(CancellationToken)) {
+            try
+            {
+                await Task.Run(async () => {
+                    while (!cancellationToken.IsCancellationRequested) {
+                        await Task.Delay(500);
+                        Console.WriteLine("0");
+
+                    }
+                }, cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
+            } catch (TaskCanceledException ex)
+            {
+
+                Console.WriteLine($"{ex}");
+                return Ok($"{ex}");
+            }
+            
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"{ex}");
+                return Ok($"{ex}");
+            }
+
+            return Ok();
+        }
+
+        //private Task TestAsync(CancellationToken cancellationToken) { 
+            
+        //}
     }
 }

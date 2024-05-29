@@ -32,17 +32,15 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
     #region [ Public Methods - CRUD ]
     public virtual async ValueTask<bool> AddSingleAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
     {
-        
         cancellationToken.ThrowIfCancellationRequested();
-        
-        using var context = await this.GetDbContextAsync();
-        if (await context.Set<TEntity>().FindAsync(entity.Id) != null)
+        using var context = await this.GetDbContextAsync(cancellationToken);
+        if (await context.Set<TEntity>().FindAsync(entity.Id, cancellationToken) != null)
         {
             return false;
         }
 
-        await context.AddAsync(entity);
-        await context.SaveChangesAsync();
+        await context.AddAsync(entity, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         return true;
     }
 
@@ -50,10 +48,10 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        using var context = await this.GetDbContextAsync();
+        using var context = await this.GetDbContextAsync(cancellationToken);
 
-        await context.AddRangeAsync(entityList);
-        await context.SaveChangesAsync();
+        await context.AddRangeAsync(entityList, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         return true;
     }
 
@@ -61,9 +59,9 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        using var context = await this.GetDbContextAsync();
+        using var context = await this.GetDbContextAsync(cancellationToken);
 
-        if (await context.Set<TEntity>().FindAsync(id) == null)
+        if (await context.Set<TEntity>().FindAsync(id, cancellationToken) == null)
         {
             return false;
         }
@@ -78,8 +76,8 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
 
         var result = default(TEntity);
 
-        using var context = await this.GetDbContextAsync();
-        result = await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        using var context = await this.GetDbContextAsync(cancellationToken);
+        result = await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         return result;
     }
@@ -88,9 +86,9 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        using var context = await this.GetDbContextAsync();
+        using var context = await this.GetDbContextAsync(cancellationToken);
         context.Set<TEntity>().Update(entity);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
         return true;
 
     }
@@ -99,8 +97,8 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        using var context = await this.GetDbContextAsync();
-        var dbResult = await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId);
+        using var context = await this.GetDbContextAsync(cancellationToken);
+        var dbResult = await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId, cancellationToken);
         if (dbResult == null)
         {
             
@@ -108,7 +106,7 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         }
         dbResult.IsActive = false;
         context.Set<TEntity>().Update(dbResult);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
         return true;
 
     }
@@ -117,8 +115,8 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        using var context = await this.GetDbContextAsync();
-        var dbResult = await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId);
+        using var context = await this.GetDbContextAsync(cancellationToken);
+        var dbResult = await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId, cancellationToken);
         if (dbResult == null)
         {
             
@@ -126,7 +124,7 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         }
         dbResult.IsActive = true;
         context.Set<TEntity>().Update(dbResult);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
         return true;
 
     }
@@ -135,15 +133,15 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        using var context = await this.GetDbContextAsync();
-        var dbResult = await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId);
+        using var context = await this.GetDbContextAsync(cancellationToken);
+        var dbResult = await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == entityId, cancellationToken);
         if (dbResult == null)
         {
             
             return false;
         }
         context.Set<TEntity>().Remove(dbResult);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
         return true;
 
     }
@@ -153,12 +151,12 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         cancellationToken.ThrowIfCancellationRequested();
         var result = default(IEnumerable<TEntity>);
 
-        using var context = await this.GetDbContextAsync();
+        using var context = await this.GetDbContextAsync(cancellationToken);
         result = await context.Set<TEntity>().AsNoTracking()
                         .OrderByDescending(x => x.IsActive)
                         .Skip(skip)
                         .Take(take)
-                        .ToListAsync();
+                        .ToListAsync(cancellationToken);
         return result;
 
     }
@@ -168,11 +166,11 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         cancellationToken.ThrowIfCancellationRequested();
         var result = default(IEnumerable<TEntity>);
 
-        using var context = await this.GetDbContextAsync();
+        using var context = await this.GetDbContextAsync(cancellationToken);
         result = await context.Set<TEntity>().AsNoTracking().Where(x => x.IsActive)
                             .Skip(skip)
                             .Take(take)
-                            .ToListAsync();
+                            .ToListAsync(cancellationToken);
         return result;
 
     }
@@ -182,11 +180,11 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         cancellationToken.ThrowIfCancellationRequested();
         var result = default(IEnumerable<TEntity>);
 
-        using var context = await this.GetDbContextAsync();
+        using var context = await this.GetDbContextAsync(cancellationToken);
         result = await context.Set<TEntity>().AsNoTracking().Where(x => !x.IsActive)
                             .Skip(skip)
                             .Take(take)
-                            .ToListAsync();
+                            .ToListAsync(cancellationToken);
         return result;
 
     }
@@ -196,8 +194,8 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         cancellationToken.ThrowIfCancellationRequested();
         var result = default(int);
 
-        using var context = await this.GetDbContextAsync();
-        result = await context.Set<TEntity>().AsNoTracking().CountAsync();
+        using var context = await this.GetDbContextAsync(cancellationToken);
+        result = await context.Set<TEntity>().AsNoTracking().CountAsync(cancellationToken);
         return result;
 
     }
@@ -207,8 +205,8 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         cancellationToken.ThrowIfCancellationRequested();
         var result = default(int);
 
-        using var context = await this.GetDbContextAsync();
-        result = await context.Set<TEntity>().AsNoTracking().CountAsync(x => x.IsActive);
+        using var context = await this.GetDbContextAsync(cancellationToken);
+        result = await context.Set<TEntity>().AsNoTracking().CountAsync(x => x.IsActive, cancellationToken);
         return result;
 
     }
@@ -219,7 +217,7 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         var result = default(int);
 
         using var context = await this.GetDbContextAsync(cancellationToken);
-        result = await context.Set<TEntity>().AsNoTracking().CountAsync(x => !x.IsActive);
+        result = await context.Set<TEntity>().AsNoTracking().CountAsync(x => !x.IsActive, cancellationToken);
         return result;
 
     }
