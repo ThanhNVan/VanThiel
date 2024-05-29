@@ -1,0 +1,86 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 Libraries", "00 Libraries", "{12433694-93EA-4121-9DC3-0C39623A6661}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Domain", "01 Domain", "{F0BA1CDA-97C1-4090-8049-7F71F84C05DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 Core", "02 Core", "{2B7AE638-A8C0-47C5-97F4-DE5A29F21CFF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 Application", "03 Application", "{B60FC2A8-9BFB-49C9-94CB-B3F420C7BAF6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 Repositories", "00 Repositories", "{C4806199-DCBC-42DB-A6AE-BC6F6A805AE3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Services", "01 Services", "{DCC3FB26-4146-4D3B-A813-A6B50A6AD65D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 Infrastructure", "04 Infrastructure", "{6CA0CF21-7399-40E7-B36C-96E70A48133D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VanThiel.Infrastructure.BlazorApp", "VanThiel.Infrasture.BlazorApp\VanThiel.Infrastructure.BlazorApp.csproj", "{A9E81A88-5ECC-4D78-B56F-AFEE289FAD0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VanThiel.Library", "VanThiel.Library\VanThiel.Library.csproj", "{A679791A-4F64-4CB2-9EB9-CAF1DA626D1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VanThiel.Domain", "VanThiel.Domain\VanThiel.Domain.csproj", "{475F8003-2E65-4E60-9BCE-6C53F4386C67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VanThiel.Core", "VanThiel.Core\VanThiel.Core.csproj", "{F0B2E962-281B-4931-9F30-4009F8ED862C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VanThiel.Application.Repositories", "VanThiel.Application\VanThiel.Application.Repositories.csproj", "{9A6B2AE7-FD60-4BB7-93EE-F4ACB33A6D74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VanThiel.Application.Services", "VanThiel.Application.Services\VanThiel.Application.Services.csproj", "{4003977E-B7E9-4408-8F4A-5D21857875F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VanThiel.Infrastructure.WebApi", "VanThiel.Infrastructure.WebApi\VanThiel.Infrastructure.WebApi.csproj", "{587B6936-05D7-407D-9897-8F33971198FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9E81A88-5ECC-4D78-B56F-AFEE289FAD0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E81A88-5ECC-4D78-B56F-AFEE289FAD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9E81A88-5ECC-4D78-B56F-AFEE289FAD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9E81A88-5ECC-4D78-B56F-AFEE289FAD0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A679791A-4F64-4CB2-9EB9-CAF1DA626D1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A679791A-4F64-4CB2-9EB9-CAF1DA626D1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A679791A-4F64-4CB2-9EB9-CAF1DA626D1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A679791A-4F64-4CB2-9EB9-CAF1DA626D1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{475F8003-2E65-4E60-9BCE-6C53F4386C67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{475F8003-2E65-4E60-9BCE-6C53F4386C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{475F8003-2E65-4E60-9BCE-6C53F4386C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{475F8003-2E65-4E60-9BCE-6C53F4386C67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0B2E962-281B-4931-9F30-4009F8ED862C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0B2E962-281B-4931-9F30-4009F8ED862C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0B2E962-281B-4931-9F30-4009F8ED862C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0B2E962-281B-4931-9F30-4009F8ED862C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A6B2AE7-FD60-4BB7-93EE-F4ACB33A6D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A6B2AE7-FD60-4BB7-93EE-F4ACB33A6D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A6B2AE7-FD60-4BB7-93EE-F4ACB33A6D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A6B2AE7-FD60-4BB7-93EE-F4ACB33A6D74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4003977E-B7E9-4408-8F4A-5D21857875F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4003977E-B7E9-4408-8F4A-5D21857875F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4003977E-B7E9-4408-8F4A-5D21857875F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4003977E-B7E9-4408-8F4A-5D21857875F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{587B6936-05D7-407D-9897-8F33971198FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{587B6936-05D7-407D-9897-8F33971198FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{587B6936-05D7-407D-9897-8F33971198FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{587B6936-05D7-407D-9897-8F33971198FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4806199-DCBC-42DB-A6AE-BC6F6A805AE3} = {B60FC2A8-9BFB-49C9-94CB-B3F420C7BAF6}
+		{DCC3FB26-4146-4D3B-A813-A6B50A6AD65D} = {B60FC2A8-9BFB-49C9-94CB-B3F420C7BAF6}
+		{A9E81A88-5ECC-4D78-B56F-AFEE289FAD0A} = {6CA0CF21-7399-40E7-B36C-96E70A48133D}
+		{A679791A-4F64-4CB2-9EB9-CAF1DA626D1F} = {12433694-93EA-4121-9DC3-0C39623A6661}
+		{475F8003-2E65-4E60-9BCE-6C53F4386C67} = {F0BA1CDA-97C1-4090-8049-7F71F84C05DA}
+		{F0B2E962-281B-4931-9F30-4009F8ED862C} = {2B7AE638-A8C0-47C5-97F4-DE5A29F21CFF}
+		{9A6B2AE7-FD60-4BB7-93EE-F4ACB33A6D74} = {C4806199-DCBC-42DB-A6AE-BC6F6A805AE3}
+		{4003977E-B7E9-4408-8F4A-5D21857875F3} = {DCC3FB26-4146-4D3B-A813-A6B50A6AD65D}
+		{587B6936-05D7-407D-9897-8F33971198FA} = {6CA0CF21-7399-40E7-B36C-96E70A48133D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7763FBE4-0388-4AA7-B7AF-986D8D39DABC}
+	EndGlobalSection
+EndGlobal
