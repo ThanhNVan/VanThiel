@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using VanThiel.Core.ExceptionClasses;
 using VanThiel.Domain.Entities;
 using VanThiel.SharedLibrary.Entity;
 
@@ -15,8 +15,33 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         var result = new ApiResult<User>();
 
-        result.StatusCode = nameof(StatusCodes.Status500InternalServerError);
-        result.Message = exception.Message;
+        switch (exception)
+        {
+            case ArgumentNullException:
+                result.StatusCode = nameof(StatusCodes.Status400BadRequest);
+                result.Message = exception.Message;
+                break;
+
+            case ArgumentException:
+                result.StatusCode = nameof(StatusCodes.Status400BadRequest);
+                result.Message = exception.Message;
+                break;
+            
+            case UnauthorizedException:
+                result.StatusCode = nameof(StatusCodes.Status401Unauthorized);
+                result.Message = "You are allowed to process this Api, please sign in to continue.";
+                break;
+            
+            case NotFoundException:
+                result.StatusCode = nameof(StatusCodes.Status404NotFound);
+                result.Message = "Not found";
+                break;
+
+            default:
+                result.StatusCode = nameof(StatusCodes.Status500InternalServerError);
+                result.Message = exception.Message;
+                break;
+        }
         result.Data = null;
 
         await httpContext

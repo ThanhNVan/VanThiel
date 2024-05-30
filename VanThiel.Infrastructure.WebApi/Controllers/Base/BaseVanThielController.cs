@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections;
 using VanThiel.Core.Services.Base;
 using VanThiel.SharedLibrary.Entity;
 
@@ -19,6 +21,20 @@ public abstract class BaseVanThielController<TEntity, TService> : ControllerBase
     {
         this._service = service;
         this._logger = logger;
+    }
+    #endregion
+
+    #region [ Protected Methods ]
+    protected IActionResult ReturnOkResult<T>(T data)
+        where T : class
+    {
+        var result = new ApiResult<T>();
+
+        result.Data = data;
+        result.StatusCode = nameof(StatusCodes.Status200OK);
+        result.Message = "Ok";
+
+        return Ok(result);
     }
     #endregion
 }

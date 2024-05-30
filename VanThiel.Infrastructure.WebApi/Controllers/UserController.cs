@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Core.Services;
 using VanThiel.Domain.Entities;
 using VanThiel.Infrastructure.WebApi.Base;
-using VanThiel.SharedLibrary.Entity;
 
 namespace VanThiel.Infrastructure.WebApi;
 
@@ -27,17 +22,9 @@ public class UserController : BaseVanThielController<User, IUserService>
     [HttpGet()]
     public async ValueTask<IActionResult> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
-        var result = new ApiResult<PagingResult<User>>();
+        var data = await this._service.GetManyAllUsersAsync(cancellationToken);
 
-       
-        result.Data = await this._service.GetManyAllUsersAsync(cancellationToken);
-        result.StatusCode = nameof(StatusCodes.Status200OK);
-        result.Message = "Ok";
-
-        throw new NotImplementedException("hehe");
-
-        return Ok(result);
-        
+        return this.ReturnOkResult(data);
     }
     #endregion
 

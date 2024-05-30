@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VanThiel.Application.Repositories.DatabaseContext;
 
@@ -11,9 +12,11 @@ using VanThiel.Application.Repositories.DatabaseContext;
 namespace VanThiel.Application.Repositories.Migrations
 {
     [DbContext(typeof(VanThielDbContext))]
-    partial class VanThielDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240530095608_AddFK")]
+    partial class AddFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
