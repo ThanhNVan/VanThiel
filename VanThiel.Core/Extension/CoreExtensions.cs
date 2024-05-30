@@ -35,13 +35,11 @@ public static class CoreExtensions
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] {
-                //new Claim("ClientId", model.ClientId),
-                //new Claim("FullName", model.FullName),
-                //new Claim("PhoneNumber", model.PhoneNumber),
-                //new Claim("Email", model.Email),
-                //new Claim("IsEmailConfirmed", model.IsEmailConfirmed.ToString()),
-                //new Claim("AvatarUrl", string.IsNullOrEmpty(model.AvatarUrl) ? "" : model.AvatarUrl),
-                new Claim(ClaimTypes.Role, "Client"),
+                new Claim("ClientId", model.Id),
+                new Claim("FullName", model.Fullname),
+                new Claim("PhoneNumber", model.PhoneNumber),
+                new Claim("Email", model.Email),
+                new Claim(ClaimTypes.Role, "User"),
             }),
             Expires = DateTime.UtcNow.AddDays(30),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)

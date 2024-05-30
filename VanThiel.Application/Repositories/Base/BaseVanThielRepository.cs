@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using VanThiel.Application.Repositories.DatabaseContext;
+using VanThiel.Application.Settings;
 using VanThiel.Core.Repositories.Base;
-using VanThiel.Domain.Settings;
 using VanThiel.SharedLibrary;
 using VanThiel.SharedLibrary.Entity;
 

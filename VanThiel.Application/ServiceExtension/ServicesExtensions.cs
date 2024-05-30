@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VanThiel.Application.Repositories.DatabaseContext;
+using VanThiel.Application.Settings;
 using VanThiel.Core.Repositories;
 using VanThiel.Core.Repositories.Context;
-using VanThiel.Domain.Settings;
 
 namespace VanThiel.Application.Repositories;
 
@@ -29,7 +29,7 @@ public static class ServicesExtensions
                 });
             options.EnableSensitiveDataLogging();
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            
+
         });
 
         services.AddScoped(p => p.GetRequiredService<IDbContextFactory<VanThielDbContext>>().CreateDbContext());
@@ -37,7 +37,7 @@ public static class ServicesExtensions
         var jwtSettings = new JwtSettings();
         configuration.GetSection("JwtSettings").Bind(jwtSettings);
         services.AddSingleton(jwtSettings);
-        
+
         var pagingSettings = new PagingSettings();
         configuration.GetSection("PagingSettings").Bind(pagingSettings);
         services.AddSingleton(pagingSettings);

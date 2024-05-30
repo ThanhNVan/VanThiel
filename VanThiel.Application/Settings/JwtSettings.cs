@@ -1,4 +1,4 @@
-﻿namespace VanThiel.Domain.Settings;
+﻿namespace VanThiel.Application.Settings;
 
 public class JwtSettings
 {
