@@ -4,8 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using VanThiel.Domain.Entities;
-
+using VanThiel.Domain.DTOs.ReturnModel;
 namespace VanThiel.Core.Extension;
 
 public static class CoreExtensions
@@ -26,7 +25,7 @@ public static class CoreExtensions
         }
     }
 
-    public static string GenerateUserAccessToken(User model, string secret)
+    public static string GenerateUserAccessToken(UserAccessInfo model, string secret)
     {
         var result = string.Empty;
         var jwtTokenHandler = new JwtSecurityTokenHandler();

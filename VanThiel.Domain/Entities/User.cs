@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using VanThiel.Domain.Enums;
 using VanThiel.SharedLibrary.Entity;
 
 namespace VanThiel.Domain.Entities;
@@ -42,7 +43,7 @@ public class User : BaseEntity
     public string Address { get; set; }
 
     [Required]
-    public int Role { get; set; }
+    public RoleEnum Role { get; set; }
     #endregion
 
     #region [ Virtual Properties ]

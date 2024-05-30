@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ public class UserController : BaseVanThielController<User, IUserService>
     #endregion
 
     #region [ Public Method - Get ]
+    [Authorize(Roles = "User")]
     [HttpGet()]
     public async ValueTask<IActionResult> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken))
     {

@@ -29,8 +29,8 @@ public abstract class BaseEntity
     {
         Id = Guid.NewGuid().ToString();
         IsActive = true;
-        CreatedAt = DateTime.UtcNow;
-        LastUpdatedAt = DateTime.UtcNow;
+        CreatedAt = DateTime.Now;
+        LastUpdatedAt = DateTime.Now;
     }
     #endregion
 }

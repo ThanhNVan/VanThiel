@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using VanThiel.Core.ExceptionClasses;
+using VanThiel.Application.ExceptionClasses;
 using VanThiel.Domain.Entities;
 using VanThiel.SharedLibrary.Entity;
 
@@ -26,12 +26,12 @@ public class GlobalExceptionHandler : IExceptionHandler
                 result.StatusCode = nameof(StatusCodes.Status400BadRequest);
                 result.Message = exception.Message;
                 break;
-            
+
             case UnauthorizedException:
                 result.StatusCode = nameof(StatusCodes.Status401Unauthorized);
                 result.Message = "You are allowed to process this Api, please sign in to continue.";
                 break;
-            
+
             case NotFoundException:
                 result.StatusCode = nameof(StatusCodes.Status404NotFound);
                 result.Message = "Not found";
@@ -44,9 +44,9 @@ public class GlobalExceptionHandler : IExceptionHandler
         }
         result.Data = null;
 
-        await httpContext
-        .Response
-        .WriteAsJsonAsync(result, cancellationToken);
+        httpContext.Response.StatusCode = 400;
+
+        await httpContext.Response.WriteAsJsonAsync(result, cancellationToken);
 
         return true;
     }

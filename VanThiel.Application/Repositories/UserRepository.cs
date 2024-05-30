@@ -10,6 +10,7 @@ using VanThiel.Core.Repositories;
 using VanThiel.Domain.DTOs.RequestModel;
 using VanThiel.Domain.DTOs.ReturnModel;
 using VanThiel.Domain.Entities;
+using VanThiel.Domain.Enums;
 using VanThiel.SharedLibrary.Entity;
 
 namespace VanThiel.Application.Repositories;
@@ -24,7 +25,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     #endregion
 
     #region [ Public Method - Get Many ]
-    public async ValueTask<PagingResult<User>> GetManyAllUsersAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public async ValueTask<PagingResult<User>> GetManyAllUsersAsync(CancellationToken cancellationToken = default)
     {
         var result = new PagingResult<User>();
 
@@ -43,9 +44,9 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     #endregion
 
     #region [ Public Method - Get Single ]
-    public async ValueTask<UserAccessInfo> GetSingleUserAccessInfoAsync(SignInModel model, CancellationToken cancellationToken = default(CancellationToken))
+    public async ValueTask<UserAccessInfo> GetSingleUserAccessInfoAsync(SignInModel model, CancellationToken cancellationToken = default)
     {
-        var result = new UserAccessInfo();
+        var result = default(UserAccessInfo);
         var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         var dbUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == model.Email
@@ -63,9 +64,60 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
 
         return result;
     }
+
+    public async ValueTask<bool> IsExistedEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        var result = default(bool);
+        var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        result = await dbContext.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower(), cancellationToken);
+
+        return result;
+    }
+    
+    public async ValueTask<bool> IsExistedPhoneAsync(string phone, CancellationToken cancellationToken = default)
+    {
+        var result = default(bool);
+        var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        result = await dbContext.Users.AnyAsync(x => x.PhoneNumber.ToLower() == phone.ToLower(), cancellationToken);
+
+        return result;
+    }
     #endregion
 
     #region [ Public Method - Create ]
+    public async ValueTask<UserAccessInfo> CreateUserAsync(SignUpModel model, CancellationToken cancellationToken = default)
+    {
+        var result = default(UserAccessInfo);
+        var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        var user = new User { 
+            Id = Guid.NewGuid().ToString(),
+            IsActive = true,
+            CreatedAt = DateTime.Now,
+            LastUpdatedAt = DateTime.Now,
+
+            Email = model.Email,
+            Fullname = model.Fullname,
+            PasswordHash = model.Password,
+            Role = RoleEnum.User,
+            PhoneNumber = model.PhoneNumber,
+        };
+
+        await dbContext.AddAsync(user, cancellationToken);   
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        result = new UserAccessInfo 
+        { 
+            Id = user.Id,
+            Email = model.Email,    
+            Fullname = model.Fullname,
+            PhoneNumber = model.PhoneNumber, 
+        };
+
+        return result;
+    }
     #endregion
 
     #region [ Public Method - Update ]
@@ -75,7 +127,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     #endregion
 
     #region [ Public Method - Validate ]
-    public async Task IsValidUserAsync(string email, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task IsValidUserAsync(string email, CancellationToken cancellationToken = default)
     {
         var dbContext = await this.GetDbContextAsync(cancellationToken);
 
@@ -91,6 +143,20 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
             throw new ArgumentException("This user has been prohibited.");
         }
 
+        return;
+    }
+
+    public async Task IsValidSignUpAsync(string email, string phone, CancellationToken cancellationToken = default)
+    {
+        var isExistedPhone = await this.IsExistedPhoneAsync(phone, cancellationToken);
+        if (isExistedPhone) {
+            throw new ArgumentException("Phone number cannot be duplicate");
+        }
+        var isExistEmail = await this.IsExistedEmailAsync(email, cancellationToken);
+        if (isExistEmail)
+        {
+            throw new ArgumentException("Email cannot be duplcate");
+        }
         return;
     }
     #endregion

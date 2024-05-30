@@ -15,4 +15,7 @@ public class SignUpModel
 
     [Required]
     public string Password { get; set; }
+
+    [Required]
+    public string Fullname { get; set; }
 }

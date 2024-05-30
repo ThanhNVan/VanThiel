@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VanThiel.Core.ExceptionClasses;
+namespace VanThiel.Application.ExceptionClasses;
 
 public class UnauthorizedException : Exception
 {
