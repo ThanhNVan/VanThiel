@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VanThiel.Data;
+namespace VanThiel.Infrastructure.BlazorApp.Data;
 
 public class WeatherForecastService
 {

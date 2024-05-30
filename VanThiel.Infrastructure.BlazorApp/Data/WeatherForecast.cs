@@ -1,6 +1,6 @@
 using System;
 
-namespace VanThiel.Data;
+namespace VanThiel.Infrastructure.BlazorApp.Data;
 
 public class WeatherForecast
 {
