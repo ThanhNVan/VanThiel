@@ -1,9 +1,29 @@
 ﻿@page "/"
+@layout _EmptyLayout
+<PageTitle>Sign In</PageTitle>
 
-<PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center align-content-between">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h2 class="mb-3">Login</h2>
+            <table border="0" cellpadding="2" cellspacing="2">
+                <tr>
 
-Welcome to your new app.
+                    <td><FluentTextField Type="InputType.Email" Placeholder="Email Address" @bind-Value=Email></FluentTextField></td>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+                </tr>
+                <tr>
+                    <td><FluentTextField Type="InputType.Password" Placeholder="Password" @bind-Value=Password></FluentTextField></td>
+                </tr>
+                <FluentLabel Typo="Typography.Subject"
+                             Class="text-danger"> @Warning </FluentLabel>
+            </table>
+            <FluentButton Appearance="Appearance.Accent"
+                          OnClick="async () => await SignInAsync()">
+                Sign In
+            </FluentButton>
+
+        </div>
+    </div>
+</div>
