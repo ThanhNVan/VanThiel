@@ -56,7 +56,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
         {
             throw new ArgumentException("Wrong Password");
         }
-
+        result = new UserAccessInfo();
         result.Id = dbUser.Id;
         result.PhoneNumber = dbUser.PhoneNumber;
         result.Fullname = dbUser.Fullname;

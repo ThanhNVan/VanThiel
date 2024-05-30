@@ -37,7 +37,7 @@ public class AuthenticationService : IAuthenticationService
 
         await this._repositoryContext.User.IsValidUserAsync(model.Email, cancellationToken);
 
-        //model.Password = CoreExtensions.HashPassword512(model.Password);
+        model.Password = CoreExtensions.HashPassword512(model.Password);
 
         var userAccessInfo = await this._repositoryContext.User.GetSingleUserAccessInfoAsync(model, cancellationToken);
 

@@ -1,19 +1,44 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Security.Claims;
+@inherits LayoutComponentBase
 
 <PageTitle>Van Thiel</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
+    <CascadingAuthenticationState>
+        <AuthorizeView>
+            <Authorized>
+                <div class="sidebar">
+                    <NavMenu />
+                </div>
+            </Authorized>
+        </AuthorizeView>
+    </CascadingAuthenticationState>
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
+        <CascadingAuthenticationState>
+            <AuthorizeView>
+                <Authorized>
+                    <div class="top-row px-4">
+                        <span class="oi oi-person" aria-hidden="true"> Hello<a>@UserDisplayName(context.User.Claims)</a></span>
+                    </div>
+                    <article class="content px-4">
+                        @Body
+                    </article>
+                </Authorized>
+
+                <NotAuthorized>
+                    <Unauthorized />
+                </NotAuthorized>
+            </AuthorizeView>
+        </CascadingAuthenticationState>
     </main>
 </div>
+
+@code {
+    private string UserDisplayName(IEnumerable<Claim> claims)
+    {
+        var name = claims.FirstOrDefault(x => x.Type == "FullName").Value;
+
+        return name;
+    }
+}

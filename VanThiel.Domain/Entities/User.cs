@@ -40,7 +40,7 @@ public class User : BaseEntity
     public string PhoneNumber { get; set; }
 
     [DataType(DataType.MultilineText)]
-    public string Address { get; set; }
+    public string? Address { get; set; }
 
     [Required]
     public RoleEnum Role { get; set; }

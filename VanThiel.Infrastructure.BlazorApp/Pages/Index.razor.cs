@@ -1,7 +1,12 @@
 ﻿using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
+using System;
 using System.Threading.Tasks;
 using VanThiel.Domain.DTOs.RequestModel;
+using VanThiel.Infrastructure.Blazor.Authentication;
+using VanThiel.Infrastructure.Blazor.Service.Interfaces;
 
 namespace VanThiel.Infrastructure.Blazor.Pages;
 
@@ -14,8 +19,14 @@ public partial class Index
     [Inject]
     private ISessionStorageService SessionStorage { get; set; }
 
-    //[Inject]
-    //private HttpClientContext HttpClientContext { get; set; }
+    [Inject]
+    private IAuthenticationService AuthenticationService { get; set; }
+
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+
+    [Inject]
+    public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     #endregion
 
     #region [ Properties ]
@@ -35,27 +46,19 @@ public partial class Index
 
         var signInModel = new SignInModel { Email = this.Email, Password = this.Password };
 
-        //var result = await this.HttpClientContext.User.SignInAsync(signInModel);
+        try
+        {
+            var response = await this.AuthenticationService.UserSignInAsync(signInModel);
+            var authenticationProvider = (AuthenticationProvider)AuthenticationStateProvider;
+            await authenticationProvider.UpdateAuthenticationStateAsync(response);
+            NavigationManager.NavigateTo("/counter");
+        } catch (Exception ex)
+        {
 
-        //if (result == null)
-        //{
-        //    this.Warning = "Incorrect Email or Password";
-        //    return;
-        //}
+            this.Warning = ex.Message;
+        }
 
-        //if (result.Model == null)
-        //{
-        //    this.Warning = "Incorrect Email or Password";
-        //    return;
-        //}
-        //var encyptedAccessToken = Encription.Encrypt(result.Model.AccessToken);
-        //result.Model.AccessToken = encyptedAccessToken;
-
-        //await SessionStorage.SetItemAsync(AppUserRole.Model, result.Model);
-
-        //NavigationManager.NavigateTo("Admin/Products", true);
         return;
-
     }
     #endregion
 

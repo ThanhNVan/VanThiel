@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 
-namespace VanThiel.Infrastructure.WebApi;
+namespace VanThiel.Domain.Authentication;
 
 public static class AuthenticationPolicies
 {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VanThiel.Application.Repositories;
+using VanThiel.Domain.Authentication;
 
 namespace VanThiel.Infrastructure.WebApi;
 

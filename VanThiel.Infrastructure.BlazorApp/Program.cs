@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.FluentUI.AspNetCore.Components;
+using VanThiel.Domain.Authentication;
 using VanThiel.Infrastructure.Blazor.Extension;
 using VanThiel.Infrastructure.BlazorApp.Data;
 
@@ -22,6 +23,8 @@ public class Program
         builder.Services.AddBlazoredSessionStorage();
         builder.Services.AddSingleton<WeatherForecastService>();
         builder.Services.AddHttpClientProviders(builder.Configuration);
+        builder.Services.AddAuthenticationPolicies(builder.Configuration);
+        builder.Services.AddAuthorization();
 
         //If you're running your application on Blazor Server, make sure a default HttpClient is registered before the AddFluentUIComponents method.
         builder.Services.AddFluentUIComponents();
@@ -39,7 +42,8 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseStaticFiles();
-
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.UseRouting();
 
         app.MapBlazorHub();
