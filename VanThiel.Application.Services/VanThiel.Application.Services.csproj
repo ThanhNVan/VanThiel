@@ -9,8 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-    <Folder Include="ServiceExtension\" />
+    <ProjectReference Include="..\VanThiel.Application\VanThiel.Application.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

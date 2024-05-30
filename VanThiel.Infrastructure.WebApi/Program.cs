@@ -1,3 +1,8 @@
+using VanThiel.Application.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using VanThiel.Application.Repositories;
 
 namespace VanThiel.Infrastructure.WebApi;
 
@@ -7,8 +12,14 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
+        // Add BE services
+        builder.Services.AddSqlServerProviders(builder.Configuration);
+        builder.Services.AddRepositories();
+        builder.Services.AddServices();
+        builder.Services.AddAuthenticationPolicies(builder.Configuration);
+        builder.Services.AddCors();
 
+        // Add services to the container.
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -22,11 +33,16 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        app.UseCors(builder => builder
+                     .AllowAnyOrigin()
+                     .AllowAnyMethod()
+                     .AllowAnyHeader());
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
+        app.UseAuthentication();
 
+        app.UseAuthorization();
 
         app.MapControllers();
 

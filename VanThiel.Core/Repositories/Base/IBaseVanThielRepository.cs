@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VanThiel.SharedLibrary;
+﻿using VanThiel.SharedLibrary;
 using VanThiel.SharedLibrary.Entity;
 
 namespace VanThiel.Core.Repositories.Base;

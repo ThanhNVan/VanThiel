@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Core.Services.Base;
 using VanThiel.Domain.Entities;
-using VanThiel.SharedLibrary.Entity;
 
 namespace VanThiel.Core.Services;
 
-public interface IUserService : IBaseVanThielService<User>
+public interface IOrderDetailService : IBaseVanThielService<OrderDetail>
 {
     #region [ Public Method - Get ]
-    ValueTask<PagingResult<User>> GetManyAllUsersAsync(CancellationToken cancellationToken = default(CancellationToken));
     #endregion
 
     #region [ Public Method - Post ]

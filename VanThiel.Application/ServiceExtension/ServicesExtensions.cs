@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VanThiel.Application.Repositories.DatabaseContext;
+using VanThiel.Core.Repositories;
+using VanThiel.Core.Repositories.Context;
+using VanThiel.Domain.Settings;
 
 namespace VanThiel.Application.Repositories;
 
@@ -30,5 +33,22 @@ public static class ServicesExtensions
         });
 
         services.AddScoped(p => p.GetRequiredService<IDbContextFactory<VanThielDbContext>>().CreateDbContext());
+
+        var jwtSettings = new JwtSettings();
+        configuration.GetSection("JwtSettings").Bind(jwtSettings);
+        services.AddSingleton(jwtSettings);
+        
+        var pagingSettings = new PagingSettings();
+        configuration.GetSection("PagingSettings").Bind(pagingSettings);
+        services.AddSingleton(pagingSettings);
+    }
+
+    public static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
+        services.AddTransient<IOrderRepository, OrderRepository>();
+        services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<RepositoryContext>();
     }
 }

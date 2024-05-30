@@ -4,6 +4,11 @@ public class ApiResult<TData>
     where TData : class
 {
     #region [ Ctor ]
+    public ApiResult()
+    {
+
+    }
+
     public ApiResult(string statusCode, string message, TData data)
     {
         StatusCode = statusCode;
