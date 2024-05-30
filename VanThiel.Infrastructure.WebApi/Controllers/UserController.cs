@@ -29,19 +29,15 @@ public class UserController : BaseVanThielController<User, IUserService>
     {
         var result = new ApiResult<PagingResult<User>>();
 
-        try
-        {
-            result.Data = await this._service.GetManyAllUsersAsync(cancellationToken);
-            result.StatusCode = nameof(StatusCodes.Status200OK);
-            result.Message = "Ok";
-            return Ok(result);
-        } catch (Exception ex)
-        {
+       
+        result.Data = await this._service.GetManyAllUsersAsync(cancellationToken);
+        result.StatusCode = nameof(StatusCodes.Status200OK);
+        result.Message = "Ok";
 
-            result.StatusCode = nameof(StatusCodes.Status500InternalServerError);
-            result.Message = ex.Message;
-            return Ok(result);
-        }
+        throw new NotImplementedException("hehe");
+
+        return Ok(result);
+        
     }
     #endregion
 

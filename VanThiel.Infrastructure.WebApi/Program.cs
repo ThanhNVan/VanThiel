@@ -17,6 +17,7 @@ public class Program
         builder.Services.AddRepositories();
         builder.Services.AddServices();
         builder.Services.AddAuthenticationPolicies(builder.Configuration);
+        builder.Services.AddExceptionHandlerDefinition();
         builder.Services.AddCors();
 
         // Add services to the container.
@@ -45,6 +46,8 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
+
+        app.UseExceptionHandler();
 
         app.Run();
     }
