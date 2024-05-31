@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using VanThiel.Application.ExceptionClasses;
+using VanThiel.Core.ExceptionClasses;
 using VanThiel.Domain.Entities;
 using VanThiel.SharedLibrary.Entity;
 

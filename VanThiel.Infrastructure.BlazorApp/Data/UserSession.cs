@@ -9,6 +9,6 @@ public class UserSession : UserAccessInfo
 
     public string Role { get; set; }
 
-    public string ClientId { get; set; }
+    public string UserId { get; set; }
     #endregion
 }

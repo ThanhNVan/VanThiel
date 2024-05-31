@@ -70,13 +70,14 @@ public class AuthenticationProvider : AuthenticationStateProvider
             var userSession = new UserSession {
                 AccessToken = accessToken,
                 Email = identity.Claims.FirstOrDefault(x => x.Type == "Email").Value,
-                ClientId = identity.Claims.FirstOrDefault(x => x.Type == "ClientId").Value,
+                UserId = identity.Claims.FirstOrDefault(x => x.Type == "UserId").Value,
                 Fullname = identity.Claims.FirstOrDefault(x => x.Type == "FullName").Value,
                 PhoneNumber = identity.Claims.FirstOrDefault(x => x.Type == "PhoneNumber").Value,
                 Role = identity.Claims.FirstOrDefault(x => x.Type == "role").Value,
             };
 
             await _session.SetItemAsync("UserSession", userSession);
+            await Task.Delay(200);
             NotifyAuthenticationStateChanged(Task.FromResult(state));
         } else
         { // sign out

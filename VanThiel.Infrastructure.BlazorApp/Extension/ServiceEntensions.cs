@@ -21,6 +21,7 @@ public static class ServiceEntensions
 
         services.AddTransient<AuthenticationStateProvider, AuthenticationProvider>();
         services.AddTransient<IAuthenticationService, AuthenticationService>();
+        services.AddTransient<IUserService, UserService>();
         services.AddTransient<JwtSecurityTokenHandler>();
 
         //services.AddTransient<HttpClientContext>();

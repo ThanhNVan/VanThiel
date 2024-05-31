@@ -11,24 +11,20 @@ using VanThiel.SharedLibrary.Entity;
 using Microsoft.AspNetCore.Http;
 using System;
 using VanThiel.Infrastructure.Blazor.Service.Interfaces;
+using Blazored.SessionStorage;
 
 namespace VanThiel.Infrastructure.Blazor.Service.Classes;
 
-public class AuthenticationService : IAuthenticationService
+public class AuthenticationService :BaseService, IAuthenticationService
 {
-    #region [ Fields ]
-    protected readonly IHttpClientFactory _httpClientFactory;
-    protected string _entityUrl;
-    protected readonly ILogger<AuthenticationService> _logger;
-    #endregion
-
     #region [ CTor ]
     public AuthenticationService(IHttpClientFactory httpClientFactory,
-                                            ILogger<AuthenticationService> logger)
+                                ILogger<AuthenticationService> logger,
+                                ISessionStorageService sessionStorageService) 
+        : base(httpClientFactory, logger, sessionStorageService)    
     {
         this._entityUrl = "api/v1/authentication";
-        this._httpClientFactory = httpClientFactory;
-        this._logger = logger;
+
     }
     #endregion
 
@@ -80,20 +76,5 @@ public class AuthenticationService : IAuthenticationService
     #endregion
 
     #region [ Public Method - Delete ]
-    #endregion
-
-    #region [ Private Methods -  ]
-    protected HttpClient CreateClient(string clientName = "BaseClient", string accessToken = "")
-    {
-        // RoutingUrl.BaseClientName = "BaseClientName"
-        var result = this._httpClientFactory.CreateClient(clientName);
-
-        if (!string.IsNullOrEmpty(accessToken))
-        {
-            result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        }
-
-        return result;
-    }
     #endregion
 }

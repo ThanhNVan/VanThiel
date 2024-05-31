@@ -25,12 +25,16 @@
         </div>
 
         <div>
+            <FluentTextField Name="Fullname" @bind-Value="SignUpModel.Fullname" Label="Fullname" TextFieldType="TextFieldType.Text" Required />
+            <FluentValidationMessage For="@(() => SignUpModel.Fullname)" />
+        </div>
+        <div>
             <FluentTextField Name="Password" @bind-Value="SignUpModel.Password" Label="Password" TextFieldType="TextFieldType.Password" Required />
             <FluentValidationMessage For="@(() => SignUpModel.Password)" />
         </div>
+        
         <div>
-            <FluentTextField Name="Fullname" @bind-Value="SignUpModel.Fullname" Label="Fullname" TextFieldType="TextFieldType.Text" Required />
-            <FluentValidationMessage For="@(() => SignUpModel.Fullname)" />
+            <FluentTextField Name="Confirm Password" @bind-Value="ConfirmPassword" Label="Confirm Password" TextFieldType="TextFieldType.Password" Required />
         </div>
 
         <div>

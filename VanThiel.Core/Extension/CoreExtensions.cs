@@ -34,7 +34,7 @@ public static class CoreExtensions
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] {
-                new Claim("ClientId", model.Id),
+                new Claim("UserId", model.Id),
                 new Claim("FullName", model.Fullname),
                 new Claim("PhoneNumber", model.PhoneNumber),
                 new Claim("Email", model.Email),

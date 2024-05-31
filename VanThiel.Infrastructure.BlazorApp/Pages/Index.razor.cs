@@ -51,7 +51,8 @@ public partial class Index
             var response = await this.AuthenticationService.UserSignInAsync(signInModel);
             var authenticationProvider = (AuthenticationProvider)AuthenticationStateProvider;
             await authenticationProvider.UpdateAuthenticationStateAsync(response);
-            NavigationManager.NavigateTo("/counter");
+
+            NavigationManager.NavigateTo("/my-profile");
         } catch (Exception ex)
         {
 

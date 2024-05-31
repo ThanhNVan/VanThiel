@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Application.Services.Base;
+using VanThiel.Core.ExceptionClasses;
 using VanThiel.Core.Repositories;
 using VanThiel.Core.Services;
+using VanThiel.Domain.DTOs;
 using VanThiel.Domain.Entities;
 using VanThiel.SharedLibrary.Entity;
 
@@ -19,9 +21,19 @@ public class UserService : BaseVanThielService<User, IUserRepository>, IUserServ
     #endregion
 
     #region [ Public Method - Get ]
-    public ValueTask<PagingResult<User>> GetManyAllUsersAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public ValueTask<PagingResult<User>> GetManyAllUsersAsync(CancellationToken cancellationToken = default)
     {
         return this._repository.GetManyAllUsersAsync(cancellationToken);
+    }
+
+    public ValueTask<UserMyProfile> GetSingle_MyProfileAsync(ClaimsIdentity identity, CancellationToken cancellationToken = default)
+    {
+        GuardParametter.IsValidIdentity(identity);
+
+        var userId = identity.FindFirst("UserId").Value;
+        GuardParametter.IsValidJwtClaim(userId);
+
+        return this._repository.GetSingle_MyProfileAsync(userId, cancellationToken);
     }
     #endregion
 

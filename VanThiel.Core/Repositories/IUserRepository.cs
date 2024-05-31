@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Core.Repositories.Base;
+using VanThiel.Domain.DTOs;
 using VanThiel.Domain.DTOs.RequestModel;
 using VanThiel.Domain.DTOs.ReturnModel;
 using VanThiel.Domain.Entities;
@@ -16,6 +17,8 @@ public interface IUserRepository : IBaseVanThielRepository<User>
 
     #region [ Public Method - Get Single ]
     ValueTask<UserAccessInfo> GetSingleUserAccessInfoAsync(SignInModel model, CancellationToken cancellationToken = default);
+    
+    ValueTask<UserMyProfile> GetSingle_MyProfileAsync(string userId, CancellationToken cancellationToken = default);
 
     ValueTask<bool> IsExistedEmailAsync(string email, CancellationToken cancellationToken = default);
 

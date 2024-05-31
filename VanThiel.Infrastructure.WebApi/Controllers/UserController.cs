@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Core.Services;
@@ -22,9 +23,19 @@ public class UserController : BaseVanThielController<User, IUserService>
     #region [ Public Method - Get ]
     [Authorize(Roles = "User")]
     [HttpGet()]
-    public async ValueTask<IActionResult> GetAllAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public async ValueTask<IActionResult> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var data = await this._service.GetManyAllUsersAsync(cancellationToken);
+
+        return this.ReturnOkResult(data);
+    }
+
+    [Authorize(Roles = "User")]
+    [HttpGet("my-profile")]
+    public async ValueTask<IActionResult> GetSingle_MyProfileAsync(CancellationToken cancellationToken = default)
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        var data = await this._service.GetSingle_MyProfileAsync(identity, cancellationToken);
 
         return this.ReturnOkResult(data);
     }

@@ -7,6 +7,8 @@ using VanThiel.Application.Repositories.Base;
 using VanThiel.Application.Repositories.DatabaseContext;
 using VanThiel.Application.Settings;
 using VanThiel.Core.Repositories;
+using VanThiel.Core.ExceptionClasses;
+using VanThiel.Domain.DTOs;
 using VanThiel.Domain.DTOs.RequestModel;
 using VanThiel.Domain.DTOs.ReturnModel;
 using VanThiel.Domain.Entities;
@@ -61,6 +63,28 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
         result.PhoneNumber = dbUser.PhoneNumber;
         result.Fullname = dbUser.Fullname;
         result.Email = dbUser.Email;
+
+        return result;
+    }
+
+    public async ValueTask<UserMyProfile> GetSingle_MyProfileAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var result = default(UserMyProfile);
+        var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        var dbUser = await dbContext.Users.FindAsync(userId, cancellationToken);
+
+        if (dbUser is null)
+        {
+            throw new NotFoundException($"Not found any user associated with this Id: {userId}");
+        }
+
+        result = new UserMyProfile();
+        result.Id = dbUser.Id;
+        result.PhoneNumber = dbUser.PhoneNumber;
+        result.Fullname = dbUser.Fullname;
+        result.Email = dbUser.Email;
+        result.Address = dbUser.Address;
 
         return result;
     }

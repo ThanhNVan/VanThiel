@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using VanThiel.Application.ExceptionClasses;
 using VanThiel.Application.Settings;
+using VanThiel.Core.ExceptionClasses;
 using VanThiel.Core.Extension;
 using VanThiel.Core.Repositories.Context;
 using VanThiel.Core.Services;

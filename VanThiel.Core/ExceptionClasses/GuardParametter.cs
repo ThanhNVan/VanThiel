@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System;
 using System.Linq;
 
-namespace VanThiel.Application.ExceptionClasses;
+namespace VanThiel.Core.ExceptionClasses;
 
 public static class GuardParametter
 {
@@ -65,7 +65,7 @@ public static class GuardParametter
     {
         if (string.IsNullOrEmpty(value))
         {
-            throw new AccessViolationException("You are not allowed to process this Api, Please sign in to continue");
+            throw new UnauthorizedException("You are not allowed to process this Api, Please sign in to continue");
         }
     }
 
@@ -73,7 +73,7 @@ public static class GuardParametter
     {
         if (value is null || value.IsAuthenticated == false)
         {
-            throw new AccessViolationException("You are not allowed to process this Api, Please sign in to continue");
+            throw new UnauthorizedException("You are not allowed to process this Api, Please sign in to continue");
         }
     }
 }

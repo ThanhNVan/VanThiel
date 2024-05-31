@@ -34,6 +34,8 @@ public partial class SignUpPage
 
     #region [ Properties ]
     public string Warning { get; set; } = string.Empty;
+
+    public string ConfirmPassword { get; set; } = string.Empty;
     #endregion
 
     #region [ Methods - Public ]
@@ -44,12 +46,17 @@ public partial class SignUpPage
 
     public async Task SignUpAsync()
     {
+        if (ConfirmPassword != SignUpModel.Password)
+        {
+            this.Warning = "Password must match Confirm Password";
+            return;
+        }
         try
         {
             var response = await this.AuthenticationService.UserSignUpAsync(this.SignUpModel);
             var authenticationProvider = (AuthenticationProvider)AuthenticationStateProvider;
             await authenticationProvider.UpdateAuthenticationStateAsync(response);
-            NavigationManager.NavigateTo("/counter");
+            NavigationManager.NavigateTo("/my-profile");
         } catch (Exception ex)
         {
             this.Warning = ex.Message;
