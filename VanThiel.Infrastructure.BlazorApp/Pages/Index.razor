@@ -6,24 +6,30 @@
 <div class="container mt-5">
     <div class="row justify-content-center align-content-between">
         <div class="col-sm-12 col-md-12 col-lg-4">
-            <h2 class="mb-3">Login</h2>
+            <h2 class="mb-3">Sign In</h2>
             <table border="0" cellpadding="2" cellspacing="2">
                 <tr>
 
-                    <td><FluentTextField Type="InputType.Email" Placeholder="Email Address" @bind-Value=Email></FluentTextField></td>
+                    <td><FluentTextField Type="InputType.Email" Placeholder="Email Address" @bind-Value=Email Required TextFieldType="TextFieldType.Email" /></td>
 
                 </tr>
                 <tr>
-                    <td><FluentTextField Type="InputType.Password" Placeholder="Password" @bind-Value=Password></FluentTextField></td>
+                    <td><FluentTextField Type="InputType.Password" Placeholder="Password" @bind-Value=Password Required TextFieldType="TextFieldType.Password" /></td>
                 </tr>
                 <FluentLabel Typo="Typography.Subject"
                              Class="text-danger"> @Warning </FluentLabel>
             </table>
-            <FluentButton Appearance="Appearance.Accent"
-                          OnClick="async () => await SignInAsync()">
-                Sign In
-            </FluentButton>
+            <FluentStack HorizontalGap="10">
+                <FluentButton Appearance="Appearance.Accent"
+                              OnClick="async () => await SignInAsync()">
+                    Sign In
+                </FluentButton>
 
+                <FluentButton OnClick="MoveToSignUp">
+                    <FluentIcon Value="@(new Icons.Regular.Size20.Globe())" Color="Color.Neutral" Slot="start" />
+                    Sign Up
+                </FluentButton>
+            </FluentStack>
         </div>
     </div>
 </div>

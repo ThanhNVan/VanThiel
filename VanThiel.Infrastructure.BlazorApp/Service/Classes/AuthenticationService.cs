@@ -55,7 +55,25 @@ public class AuthenticationService : IAuthenticationService
 
         throw new Exception($"{apiResult.Message}");
     }
-    //ValueTask<UserSession> SignUpAsync(SignInModel model, CancellationToken cancellationToken = default);
+    public async ValueTask<string> UserSignUpAsync(SignUpModel model, CancellationToken cancellationToken = default)
+    {
+        var result = default(string);
+        var url = this._entityUrl + "/user/sign-up";
+
+        var httpClient = this.CreateClient();
+
+        var response = await httpClient.PostAsJsonAsync(url, model);
+
+        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+
+        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
+        {
+            result = apiResult.Data;
+            return result;
+        }
+
+        throw new Exception($"{apiResult.Message}");
+    }
     #endregion
 
     #region [ Public Method - Put ]
@@ -65,7 +83,7 @@ public class AuthenticationService : IAuthenticationService
     #endregion
 
     #region [ Private Methods -  ]
-    protected HttpClient CreateClient(string emailKey = "", string clientName = "BaseClient", string accessToken = "")
+    protected HttpClient CreateClient(string clientName = "BaseClient", string accessToken = "")
     {
         // RoutingUrl.BaseClientName = "BaseClientName"
         var result = this._httpClientFactory.CreateClient(clientName);

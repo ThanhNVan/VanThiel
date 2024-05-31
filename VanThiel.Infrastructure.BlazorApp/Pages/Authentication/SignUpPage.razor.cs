@@ -10,8 +10,11 @@ using VanThiel.Infrastructure.Blazor.Service.Interfaces;
 
 namespace VanThiel.Infrastructure.Blazor.Pages;
 
-public partial class Index
+public partial class SignUpPage
 {
+    [SupplyParameterFromForm]
+    private SignUpModel SignUpModel { get; set; } = new();
+
     #region [ Properties - Inject ]
     [Inject]
     private NavigationManager NavigationManager { get; set; }
@@ -30,52 +33,29 @@ public partial class Index
     #endregion
 
     #region [ Properties ]
-    private string Email { get; set; }
-    private string Password { get; set; }
-    private string Warning { get; set; } = string.Empty;
+    public string Warning { get; set; } = string.Empty;
     #endregion
 
     #region [ Methods - Public ]
-    public async Task SignInAsync()
+    public void MoveToIndex()
     {
-        var isValid = CheckValidInput();
-        if (!isValid)
-        {
-            return;
-        }
+        NavigationManager.NavigateTo("/");
+    }
 
-        var signInModel = new SignInModel { Email = this.Email, Password = this.Password };
-
+    public async Task SignUpAsync()
+    {
         try
         {
-            var response = await this.AuthenticationService.UserSignInAsync(signInModel);
+            var response = await this.AuthenticationService.UserSignUpAsync(this.SignUpModel);
             var authenticationProvider = (AuthenticationProvider)AuthenticationStateProvider;
             await authenticationProvider.UpdateAuthenticationStateAsync(response);
             NavigationManager.NavigateTo("/counter");
         } catch (Exception ex)
         {
-
             this.Warning = ex.Message;
         }
 
         return;
-    }
-
-    public void MoveToSignUp()
-    {
-        NavigationManager.NavigateTo("/sign-up");
-    }
-    #endregion
-
-    #region [ Methods - Private ]
-    private bool CheckValidInput()
-    {
-        if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
-        {
-            this.Warning = "Invalid Input";
-            return false;
-        }
-        return true;
     }
     #endregion
 }

@@ -1,0 +1,47 @@
+﻿@page "/sign-up"
+@using VanThiel.Domain.DTOs.RequestModel
+
+@namespace VanThiel.Infrastructure.Blazor.Pages
+
+@layout _EmptyLayout
+<PageTitle>Sign Up</PageTitle>
+
+<h3 style="text-align:center">Sign Up </h3>
+
+
+<EditForm Model="@SignUpModel">
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+        <div>
+            <FluentTextField Name="Email" @bind-Value="SignUpModel.Email" Label="Email" TextFieldType="TextFieldType.Email" Required />
+            <FluentValidationMessage For="@(() => SignUpModel.Email)" />
+        </div>
+        <div>
+            <FluentTextField Name="PhoneNumber" @bind-Value="SignUpModel.PhoneNumber" Label="PhoneNumber" TextFieldType="TextFieldType.Tel" Required />
+            <FluentValidationMessage For="@(() => SignUpModel.PhoneNumber)" />
+        </div>
+
+        <div>
+            <FluentTextField Name="Password" @bind-Value="SignUpModel.Password" Label="Password" TextFieldType="TextFieldType.Password" Required />
+            <FluentValidationMessage For="@(() => SignUpModel.Password)" />
+        </div>
+        <div>
+            <FluentTextField Name="Fullname" @bind-Value="SignUpModel.Fullname" Label="Fullname" TextFieldType="TextFieldType.Text" Required />
+            <FluentValidationMessage For="@(() => SignUpModel.Fullname)" />
+        </div>
+
+        <div>
+            <FluentLabel Typo="Typography.Subject"
+                         Class="text-danger"> @Warning </FluentLabel>
+        </div>
+
+        <FluentStack HorizontalGap="10" HorizontalAlignment="HorizontalAlignment.Center">
+            <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" OnClick="async () => await SignUpAsync()">Submit</FluentButton>
+
+            <FluentButton Type="ButtonType.Reset" Appearance="Appearance.Outline" OnClick="MoveToIndex">Cancel</FluentButton>
+        </FluentStack>
+    </FluentStack>
+</EditForm>
