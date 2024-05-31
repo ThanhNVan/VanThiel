@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using VanThiel.Domain.DTOs;
 using VanThiel.Domain.DTOs.RequestModel;
 
 namespace VanThiel.Infrastructure.Blazor.Service.Interfaces;
@@ -16,6 +17,7 @@ public interface IAuthenticationService
     #endregion
 
     #region [ Public Method - Put ]
+    ValueTask<string> Update_UserProfileAsync(UserMyProfile model, CancellationToken cancellationToken = default);
     #endregion
 
     #region [ Public Method - Delete ]

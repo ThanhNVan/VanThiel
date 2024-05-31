@@ -35,6 +35,30 @@ public class UserService : BaseVanThielService<User, IUserRepository>, IUserServ
 
         return this._repository.GetSingle_MyProfileAsync(userId, cancellationToken);
     }
+    public ValueTask<bool> GetSingle_IsExistEmailAsync(string email, string currentEmail, CancellationToken cancellationToken = default)
+    {
+        GuardParametter.StringIsNullOrEmpty(email);
+        GuardParametter.StringIsNullOrEmpty(currentEmail);
+
+        if (email.Equals(currentEmail))
+        {
+            return ValueTask.FromResult(false);
+        }
+
+        return this._repository.IsExistedEmailAsync(email, cancellationToken);
+    }
+    public ValueTask<bool> GetSingle_IsExistPhoneNumberAsync(string phone, string currentPhone, CancellationToken cancellationToken = default)
+    {
+        GuardParametter.StringIsNullOrEmpty(phone);
+        GuardParametter.StringIsNullOrEmpty(currentPhone);
+
+        if (phone.Equals(currentPhone))
+        {
+            return ValueTask.FromResult(false);
+        }
+
+        return this._repository.IsExistedPhoneAsync(phone, cancellationToken);
+    }
     #endregion
 
     #region [ Public Method - Post ]

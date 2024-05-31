@@ -4,3 +4,72 @@
 @namespace VanThiel.Infrastructure.Blazor.Pages
 
 <PageTitle>My Profile</PageTitle>
+
+<h3 style="text-align:center">My Profile</h3>
+<FluentEditForm Model="@Model">
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+
+        <div>
+            <FluentTextField ReadOnly="@IsReadonly" Name="Email" @bind-Value="Model.Email" Label="Email" TextFieldType="TextFieldType.Email" Required />
+            <FluentValidationMessage For="@(() => Model.Email)" />
+            @if (!IsReadonly)
+            {
+                <FluentStack HorizontalGap="30" HorizontalAlignment="HorizontalAlignment.Center">
+                    <FluentButton Appearance="Appearance.Accent" OnClick="async () => await IsEmailExistedAsync()">
+                        Check Email
+                    </FluentButton>
+                </FluentStack>
+            }
+        </div>
+
+        <div>
+            <FluentTextField ReadOnly="@IsReadonly" Name="PhoneNumber" @bind-Value="Model.PhoneNumber" Label="Phone Number" TextFieldType="TextFieldType.Tel" Required />
+            <FluentValidationMessage For="@(() => Model.PhoneNumber)" />
+            @if (!IsReadonly)
+            {
+                <FluentStack HorizontalGap="30" HorizontalAlignment="HorizontalAlignment.Center">
+                    <FluentButton Appearance="Appearance.Accent" OnClick="async () => await IsPhoneNumberExistedAsync()">
+                        Check Phone
+                    </FluentButton>
+                </FluentStack>
+            }
+        </div>
+
+        <div>
+            <FluentTextField ReadOnly="@IsReadonly" Name="Fullname" @bind-Value="Model.Fullname" Label="Fullname" TextFieldType="TextFieldType.Text" Required />
+            <FluentValidationMessage For="@(() => Model.Fullname)" />
+        </div>
+
+        <div>
+            <FluentTextField ReadOnly="@IsReadonly" Name="Password" @bind-Value="Model.Address" Label="Address" TextFieldType="TextFieldType.Text" />
+            <FluentValidationMessage For="@(() => Model.Address)" />
+        </div>
+
+        <FluentStack HorizontalGap="30" HorizontalAlignment="HorizontalAlignment.Center">
+            @if (!IsReadonly)
+            {
+                <FluentButton OnClick="CancelUpdate">
+                    Cancel
+                </FluentButton>
+
+                <FluentButton Appearance="Appearance.Accent"
+                              OnClick="async () => await SaveAsync()">
+                    Save
+                </FluentButton>
+            } else
+            {
+
+                <FluentButton Appearance="Appearance.Accent"
+                              OnClick="AllowUpdate"
+                              Type="ButtonType.Submit">
+                    Update My Info
+                </FluentButton>
+            }
+
+        </FluentStack>
+
+    </FluentStack>
+</FluentEditForm>

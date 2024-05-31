@@ -15,6 +15,10 @@ public interface IUserService : IBaseVanThielService<User>
     ValueTask<PagingResult<User>> GetManyAllUsersAsync(CancellationToken cancellationToken = default(CancellationToken));
 
     ValueTask<UserMyProfile> GetSingle_MyProfileAsync(ClaimsIdentity identity, CancellationToken cancellationToken = default);
+    
+    ValueTask<bool> GetSingle_IsExistEmailAsync(string email, string currentEmail, CancellationToken cancellationToken = default);
+
+    ValueTask<bool> GetSingle_IsExistPhoneNumberAsync(string phone, string currentPhone, CancellationToken cancellationToken = default);
     #endregion
 
     #region [ Public Method - Post ]

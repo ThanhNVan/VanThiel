@@ -9,7 +9,7 @@
 <h3 style="text-align:center">Sign Up </h3>
 
 
-<EditForm Model="@SignUpModel">
+<FluentEditForm Model="@SignUpModel">
     <DataAnnotationsValidator />
     <FluentValidationSummary />
 
@@ -48,4 +48,4 @@
             <FluentButton Type="ButtonType.Reset" Appearance="Appearance.Outline" OnClick="MoveToIndex">Cancel</FluentButton>
         </FluentStack>
     </FluentStack>
-</EditForm>
+</FluentEditForm>

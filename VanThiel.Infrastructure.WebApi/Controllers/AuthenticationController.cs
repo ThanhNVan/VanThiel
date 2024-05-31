@@ -5,6 +5,7 @@ using VanThiel.Core.Services;
 using VanThiel.Domain.DTOs.RequestModel;
 using Microsoft.AspNetCore.Http;
 using VanThiel.SharedLibrary.Entity;
+using VanThiel.Domain.DTOs;
 
 namespace VanThiel.Infrastructure.WebApi;
 
@@ -43,6 +44,12 @@ public class AuthenticationController : ControllerBase
     #endregion
 
     #region [ Public Method - Put ]
+    [HttpPut("user/update-info")]
+    public async ValueTask<IActionResult> Update_UserProfileAsync([FromBody] UserMyProfile model, CancellationToken cancellationToken = default)
+    {
+        var result = await this._service.Update_UserProfileAsync(model, cancellationToken);
+        return this.ReturnOkResult(result);
+    }
     #endregion
 
     #region [ Public Method - Delete ]

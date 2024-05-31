@@ -145,6 +145,29 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     #endregion
 
     #region [ Public Method - Update ]
+    public async ValueTask<UserAccessInfo> UpdateAsync(UserMyProfile model, CancellationToken cancellationToken = default)
+    {
+        var result = default(UserAccessInfo);
+
+        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        var dbEntity = await dbContext.Users.FindAsync(model.Id);
+    
+        dbEntity.PhoneNumber = model.PhoneNumber;
+        dbEntity.Email = model.Email;
+        dbEntity.Address = model.Address;
+        dbEntity.Fullname = model.Fullname;
+
+        dbContext.Users.Update(dbEntity);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        result = new UserAccessInfo { 
+            Id = model.Id,
+            Email = model.Email,
+            Fullname = model.Fullname,
+            PhoneNumber = model.PhoneNumber,
+        };
+        return result;
+    }
     #endregion
 
     #region [ Public Method - Delete ]
@@ -170,7 +193,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
         return;
     }
 
-    public async Task IsValidSignUpAsync(string email, string phone, CancellationToken cancellationToken = default)
+    public async Task IsValidUserByPhoneAndEmailAsync(string email, string phone, CancellationToken cancellationToken = default)
     {
         var isExistedPhone = await this.IsExistedPhoneAsync(phone, cancellationToken);
         if (isExistedPhone) {

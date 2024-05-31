@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Core.Services;
@@ -38,6 +39,22 @@ public class UserController : BaseVanThielController<User, IUserService>
         var data = await this._service.GetSingle_MyProfileAsync(identity, cancellationToken);
 
         return this.ReturnOkResult(data);
+    }
+
+    [HttpGet("existed-email/newEmail={email}&currentEmail={currentEmail}")]
+    public async ValueTask<IActionResult> GetSingle_IsExistEmailAsync(string email, string currentEmail, CancellationToken cancellationToken = default)
+    {
+        var data = await this._service.GetSingle_IsExistEmailAsync(email, currentEmail, cancellationToken);
+
+        return this.ReturnOkResult(data.ToString());
+    }
+    
+    [HttpGet("existed-phone/newPhone={phone}&&currentPhone={currentPhone}")]
+    public async ValueTask<IActionResult> GetSingle_IsExistPhoneNumberAsync(string phone, string currentPhone, CancellationToken cancellationToken = default)
+    {
+        var data = await this._service.GetSingle_IsExistPhoneNumberAsync(phone, currentPhone,cancellationToken);
+
+        return this.ReturnOkResult(data.ToString());
     }
     #endregion
 

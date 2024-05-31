@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using VanThiel.Infrastructure.Blazor.Service.Interfaces;
 using Blazored.SessionStorage;
+using VanThiel.Domain.DTOs;
 
 namespace VanThiel.Infrastructure.Blazor.Service.Classes;
 
@@ -73,6 +74,25 @@ public class AuthenticationService :BaseService, IAuthenticationService
     #endregion
 
     #region [ Public Method - Put ]
+    public async ValueTask<string> Update_UserProfileAsync(UserMyProfile model, CancellationToken cancellationToken = default)
+    {
+        var result = default(string);
+        var url = this._entityUrl + "/user/update-info";
+
+        var httpClient = this.CreateClient();
+
+        var response = await httpClient.PutAsJsonAsync(url, model);
+
+        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+
+        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
+        {
+            result = apiResult.Data;
+            return result;
+        }
+
+        throw new Exception($"{apiResult.Message}");
+    }
     #endregion
 
     #region [ Public Method - Delete ]

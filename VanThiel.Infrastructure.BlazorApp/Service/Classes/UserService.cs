@@ -46,6 +46,44 @@ public class UserService : BaseService, IUserService
         }
         throw new Exception($"{apiResult.Message}");
     }
+
+    public async ValueTask<bool> GetSingle_IsExistEmailAsync(string email, string currentEmail, CancellationToken cancellationToken = default)
+    {
+        var result = default(bool);
+        var url = this._entityUrl + $"/existed-email/newEmail={email}&currentEmail={currentEmail}";
+
+        var httpClient = await this.CreateClientAsync();
+
+        var response = await httpClient.GetAsync(url);
+
+        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+
+        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
+        {
+            result = bool.Parse(apiResult.Data);
+            return result;
+        }
+        throw new Exception($"{apiResult.Message}");
+    }
+    
+    public async ValueTask<bool> GetSingle_IsExistPhoneNumberAsync(string phone, string currentPhone, CancellationToken cancellationToken = default)
+    {
+        var result = default(bool);
+        var url = this._entityUrl + $"/existed-phone/newPhone={phone}&&currentPhone={currentPhone}";
+
+        var httpClient = await this.CreateClientAsync();
+
+        var response = await httpClient.GetAsync(url);
+
+        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+
+        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
+        {
+            result = bool.Parse(apiResult.Data);
+            return result;
+        }
+        throw new Exception($"{apiResult.Message}");
+    }
     #endregion
 
     #region [ Public Method - Post ]

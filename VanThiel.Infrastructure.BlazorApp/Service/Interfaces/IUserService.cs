@@ -9,6 +9,10 @@ public interface IUserService
 {
     #region [ Public Method - Get ]
     ValueTask<UserMyProfile> GetSingle_MyProfileAsync(CancellationToken cancellationToken = default);
+
+    ValueTask<bool> GetSingle_IsExistEmailAsync(string email, string currentEmail, CancellationToken cancellationToken = default);
+
+    ValueTask<bool> GetSingle_IsExistPhoneNumberAsync(string phone, string currentPhone, CancellationToken cancellationToken = default);
     #endregion
 
     #region [ Public Method - Post ]

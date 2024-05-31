@@ -30,7 +30,8 @@ public interface IUserRepository : IBaseVanThielRepository<User>
     #endregion
 
     #region [ Public Method - Update ]
-    #endregion
+    ValueTask<UserAccessInfo> UpdateAsync(UserMyProfile model, CancellationToken cancellationToken = default);
+     #endregion
 
     #region [ Public Method - Delete ]
     #endregion
@@ -38,6 +39,6 @@ public interface IUserRepository : IBaseVanThielRepository<User>
     #region [ Public Method - Validate ]
     Task IsValidUserAsync(string email, CancellationToken cancellationToken = default);
 
-    Task IsValidSignUpAsync(string email, string phone, CancellationToken cancellationToken = default);
+    Task IsValidUserByPhoneAndEmailAsync(string email, string phone, CancellationToken cancellationToken = default);
     #endregion
 }
