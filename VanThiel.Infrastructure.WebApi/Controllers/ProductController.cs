@@ -28,6 +28,13 @@ public class ProductController : BaseVanThielController<Product, IProductService
         var result = await this._service.GetMany_PagingAsync(page, cancellationToken);
         return this.ReturnOkResult(result);
     }
+    
+    [HttpGet("active")]
+    public async ValueTask<IActionResult> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await this._service.GetMany_ActiveAsync(cancellationToken);
+        return this.ReturnOkResult(result);
+    }
     #endregion
 
     #region [ Public Method - Post ]

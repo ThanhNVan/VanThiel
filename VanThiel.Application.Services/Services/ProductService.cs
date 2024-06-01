@@ -25,6 +25,11 @@ public class ProductService : BaseVanThielService<Product, IProductRepository>, 
         GuardParametter.IsValidPage(page);
         return this._repository.GetMany_PagingAsync(page, cancellationToken);
     }
+    
+    public ValueTask<IEnumerable<Product>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
+    {
+        return this._repository.GetMany_ActiveAsync(cancellationToken);
+    }
     #endregion
 
     #region [ Method - Post ]

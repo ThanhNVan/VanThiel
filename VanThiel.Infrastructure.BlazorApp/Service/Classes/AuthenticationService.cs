@@ -36,10 +36,10 @@ public class AuthenticationService : BaseService, IAuthenticationService
         var result = default(string);
         var url = this._entityUrl + "/user/sign-in";
 
-        var httpClient = this.CreateClient();
+        var httpClient = await this.CreateClientAsync(false, cancellationToken);
 
         var response = await httpClient.PostAsJsonAsync(url, model);
-        EnsureSuccessfullStatusCode(response);
+        EnsureSuccessfulStatusCode(response);
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
@@ -56,10 +56,10 @@ public class AuthenticationService : BaseService, IAuthenticationService
         var result = default(string);
         var url = this._entityUrl + "/user/sign-up";
 
-        var httpClient = this.CreateClient();
+        var httpClient = await this.CreateClientAsync(false, cancellationToken);
 
         var response = await httpClient.PostAsJsonAsync(url, model);
-        EnsureSuccessfullStatusCode(response);
+        EnsureSuccessfulStatusCode(response);
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
@@ -79,10 +79,10 @@ public class AuthenticationService : BaseService, IAuthenticationService
         var result = default(string);
         var url = this._entityUrl + "/user/update-info";
 
-        var httpClient = this.CreateClient();
+        var httpClient = await this.CreateClientAsync(false, cancellationToken);
 
         var response = await httpClient.PutAsJsonAsync(url, model);
-        EnsureSuccessfullStatusCode(response);
+        EnsureSuccessfulStatusCode(response);
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))

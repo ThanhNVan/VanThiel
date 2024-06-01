@@ -12,6 +12,7 @@ using System.Security.Claims;
 using VanThiel.Domain.DTOs.RequestModel;
 using VanThiel.Domain.Enums;
 using System;
+using VanThiel.Domain.DTOs.ReturnModel;
 
 namespace VanThiel.Application.Services;
 
@@ -31,14 +32,14 @@ public class CartService : BaseVanThielService<Cart, ICartRepository>, ICartServ
     #endregion
 
     #region [ Public Method - Get ]
-    public async ValueTask<IEnumerable<Cart>> GetMany_ByUserAsync(ClaimsIdentity identity, CancellationToken cancellationToken = default)
+    public async ValueTask<IEnumerable<CartInfo>> GetMany_ByUserAsync(ClaimsIdentity identity, CancellationToken cancellationToken = default)
     {
         GuardParametter.IsValidIdentity(identity);
 
         var userId = identity.FindFirst("UserId").Value;
         GuardParametter.IsValidJwtClaim(userId);
 
-        var result = default(IEnumerable<Cart>);
+        var result = default(IEnumerable<CartInfo>);
         var isExistUser = await this._userRepository.IsExistAsync(userId, cancellationToken);
 
         if (!isExistUser) {
@@ -52,7 +53,7 @@ public class CartService : BaseVanThielService<Cart, ICartRepository>, ICartServ
     #endregion
 
     #region [ Public Method - Post ]
-    public async ValueTask<bool> Update_AddToCartAsync(ClaimsIdentity identity, string productId, CancellationToken cancellationToken = default)
+    public async ValueTask<bool> Update_AddSingleToCartAsync(ClaimsIdentity identity, string productId, CancellationToken cancellationToken = default)
     {
         GuardParametter.IsValidIdentity(identity);
 
@@ -62,9 +63,11 @@ public class CartService : BaseVanThielService<Cart, ICartRepository>, ICartServ
 
         var isExistUser = await this._userRepository.IsExistAsync(userId, cancellationToken);
 
-        var userCart = await this._repository.GetSingle_ByProductAndUserAsync(productId, userId, cancellationToken);
-        
-        if (userCart is null) { 
+        var userCart = await this._repository.GetSingle_ByUserAndProductAsync(userId, productId, cancellationToken);
+
+        var instock = await this._productRepository.GetSingle_InstockAsync(productId, cancellationToken);
+
+        if (userCart is null && instock > 0) { 
             var newCart = new Cart() { 
                 ProductId = productId,
                 Quantity = 1,
@@ -75,7 +78,6 @@ public class CartService : BaseVanThielService<Cart, ICartRepository>, ICartServ
             return true;
         }
 
-        var instock = await this._productRepository.GetSingle_InstockAsync(productId, cancellationToken);
         if (instock == userCart.Quantity)
         {
             throw new ArgumentException("Surpass the value instock");
@@ -96,7 +98,7 @@ public class CartService : BaseVanThielService<Cart, ICartRepository>, ICartServ
 
         var isExistUser = await this._userRepository.IsExistAsync(userId, cancellationToken);
 
-        var userCart = await this._repository.GetSingle_ByProductAndUserAsync(productId, userId, cancellationToken);
+        var userCart = await this._repository.GetSingle_ByUserAndProductAsync(userId, productId, cancellationToken);
         
         if (userCart is null) { 
             throw new NotFoundException("Not found cart");
@@ -105,13 +107,58 @@ public class CartService : BaseVanThielService<Cart, ICartRepository>, ICartServ
         if (userCart.Quantity == 1)
         {
             userCart.IsActive = false;
+            await this._repository.UpdateAsync(userCart, cancellationToken);
+            return true;
         }
 
         userCart.Quantity--;
         await this._repository.UpdateAsync(userCart, cancellationToken);
         return true;
     }
-    
+
+    public async ValueTask<bool> Update_AddManyToCartAsync(ClaimsIdentity identity, UpdateCart model, CancellationToken cancellationToken = default)
+    {
+        GuardParametter.IsValidIdentity(identity);
+
+        var userId = identity.FindFirst("UserId").Value;
+        GuardParametter.IsValidJwtClaim(userId);
+        GuardParametter.StringIsNullOrEmpty(model.ProductId);
+
+        var isExistUser = await this._userRepository.IsExistAsync(userId, cancellationToken);
+
+        var userCart = await this._repository.GetSingle_ByUserAndProductAsync(userId, model.ProductId, cancellationToken);
+        var instock = await this._productRepository.GetSingle_InstockAsync(model.ProductId, cancellationToken);
+
+        if (userCart is null && instock < model.Quantity)
+        {
+            var newCart = new Cart()
+            {
+                ProductId = model.ProductId,
+                Quantity = model.Quantity,
+                UserId = userId,
+                Status = CartStatus.Added,
+            };
+            await this._repository.AddSingleAsync(newCart, cancellationToken);
+            return true;
+        }
+
+
+        var newQuantity = userCart.Quantity + model.Quantity;
+        if (instock == userCart.Quantity || instock < newQuantity)
+        {
+            throw new ArgumentException("Surpass the value instock");
+        }
+
+        userCart.Quantity = newQuantity;
+        await this._repository.UpdateAsync(userCart, cancellationToken);
+        return true;
+    }
+    #endregion
+
+    #region [ Public Method - Put ]
+    #endregion
+
+    #region [ Public Method - Delete ]
     public async ValueTask<bool> Update_RemoveFromCartAsync(ClaimsIdentity identity, string productId, CancellationToken cancellationToken = default)
     {
         GuardParametter.IsValidIdentity(identity);
@@ -122,7 +169,7 @@ public class CartService : BaseVanThielService<Cart, ICartRepository>, ICartServ
 
         var isExistUser = await this._userRepository.IsExistAsync(userId, cancellationToken);
 
-        var userCart = await this._repository.GetSingle_ByProductAndUserAsync(productId, userId, cancellationToken);
+        var userCart = await this._repository.GetSingle_ByUserAndProductAsync(userId, productId, cancellationToken);
         
         if (userCart is null) { 
             throw new NotFoundException("Not found cart");
@@ -132,11 +179,5 @@ public class CartService : BaseVanThielService<Cart, ICartRepository>, ICartServ
         await this._repository.UpdateAsync(userCart, cancellationToken);
         return true;
     }
-    #endregion
-
-    #region [ Public Method - Put ]
-    #endregion
-
-    #region [ Public Method - Delete ]
     #endregion
 }

@@ -8,7 +8,7 @@
 @if (Data is not null)
 {
     <div class="grid" style="width: 100%; overflow-x:auto;">
-        <FluentDataGrid Items="@Data" Pagination="@Pagination" Style="width: 1300px;" >
+        <FluentDataGrid Items="@Data" Pagination="@pagination" Style="width: 1300px;" ShowHover="true">
             <PropertyColumn Property="@(c => c.Name)" Sortable="true" Class="country-name" />
             <PropertyColumn Property="@(c => c.Category)" Sortable="true" Align="Align.End" />
             <PropertyColumn Property="@(c => c.Price)" Sortable="true" Align="Align.End" />
@@ -22,24 +22,6 @@
             </TemplateColumn>
         </FluentDataGrid>
     </div>
-}
 
-@if (Pagination is not null)
-{
-    <div class="page-buttons" style="margin-top: 20px">
-        Page:
-        @if (Pagination.TotalItemCount.HasValue)
-        {
-            for (var pageIndex = 0; pageIndex <= Pagination.LastPageIndex; pageIndex++)
-            {
-                var capturedIndex = pageIndex;
-                <FluentButton @onclick="@(async () => await GoToPageAsync(capturedIndex))"
-                              Appearance="@PageButtonAppearance(capturedIndex)"
-                              aria-current="@AriaCurrentValue(capturedIndex)"
-                              aria-label="@AriaLabel(capturedIndex + 1)">
-                    @(capturedIndex + 1)
-                </FluentButton>
-            }
-        }
-    </div>
+    <FluentPaginator State="@pagination" />
 }

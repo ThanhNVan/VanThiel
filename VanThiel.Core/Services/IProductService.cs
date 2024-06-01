@@ -11,6 +11,8 @@ public interface IProductService : IBaseVanThielService<Product>
 {
     #region [ Method - Get ]
     ValueTask<PagingResult<Product>> GetMany_PagingAsync(int page, CancellationToken cancellationToken = default);
+
+    ValueTask<IEnumerable<Product>> GetMany_ActiveAsync(CancellationToken cancellationToken = default);
     #endregion
 
     ValueTask<bool> AddManyAsync(IEnumerable<Product> list);

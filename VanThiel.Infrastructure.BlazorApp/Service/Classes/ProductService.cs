@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +34,7 @@ public class ProductService : BaseService, IProductService
 
         var response = await httpClient.GetAsync(url);
 
-        this.EnsureSuccessfullStatusCode(response);
+        this.EnsureSuccessfulStatusCode(response);
 
         var apiResult = await this.DeserializeObjectAsync<PagingResult<Product>>(response);
 
@@ -43,5 +45,35 @@ public class ProductService : BaseService, IProductService
         }
         throw new Exception($"{apiResult.Message}");
     }
+    
+    public async ValueTask<IEnumerable<Product>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
+    {
+        var result = default(IEnumerable<Product>);
+        var url = this._entityUrl + $"/active";
+
+        var httpClient = await this.CreateClientAsync();
+
+        var response = await httpClient.GetAsync(url);
+
+        this.EnsureSuccessfulStatusCode(response);
+
+        var apiResult = await this.DeserializeObjectAsync<IEnumerable<Product>>(response);
+
+        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
+        {
+            result = apiResult.Data;
+            return result;
+        }
+        throw new Exception($"{apiResult.Message}");
+    }
+    #endregion
+
+    #region [ Public Method - Post ]
+    #endregion
+
+    #region [ Public Method - Put ]
+    #endregion
+
+    #region [ Public Method - Delete ]
     #endregion
 }

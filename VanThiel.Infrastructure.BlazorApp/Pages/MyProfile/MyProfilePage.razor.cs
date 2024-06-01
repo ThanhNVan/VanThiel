@@ -48,6 +48,7 @@ public partial class MyProfilePage
     {
         this.Data = await this.UserService.GetSingle_MyProfileAsync();
         this.Model = ObjectCopier.Clone(this.Data);
+        this.MessageService.Clear();
         StateHasChanged();
         await base.OnInitializedAsync();
     }

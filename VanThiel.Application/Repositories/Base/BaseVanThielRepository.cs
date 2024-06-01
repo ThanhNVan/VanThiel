@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ public abstract class BaseVanThielRepository<TEntity> : BaseEntityRepository<TEn
     {
         var result = new PagingResult<TEntity>();
 
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         result.PageSize = this._pagingSettings.PageSize;
         result.CurrentPage = page;
@@ -54,6 +55,18 @@ public abstract class BaseVanThielRepository<TEntity> : BaseEntityRepository<TEn
             totalPage = dataCount / this._pagingSettings.PageSize + 1; 
         }
         result.TotalPages = totalPage;  
+
+        return result;
+    }
+
+    public async ValueTask<IEnumerable<TEntity>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
+    {
+        var result = new List<TEntity>();
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        result = await dbContext.Set<TEntity>().AsNoTracking()
+                .Where(x => x.IsActive)    
+                .ToListAsync(cancellationToken);
 
         return result;
     }

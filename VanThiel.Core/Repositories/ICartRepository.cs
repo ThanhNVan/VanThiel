@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Core.Repositories.Base;
+using VanThiel.Domain.DTOs.ReturnModel;
 using VanThiel.Domain.Entities;
 
 namespace VanThiel.Core.Repositories;
@@ -9,11 +10,11 @@ namespace VanThiel.Core.Repositories;
 public interface ICartRepository : IBaseVanThielRepository<Cart>
 {
     #region [ Public Method - Get Many ]
-    ValueTask<IEnumerable<Cart>> GetMany_ByUserAsync(string userId, CancellationToken cancellationToken = default);
+    ValueTask<IEnumerable<CartInfo>> GetMany_ByUserAsync(string userId, CancellationToken cancellationToken = default);
     #endregion
 
     #region [ Public Method - Get Single ]
-    ValueTask<Cart> GetSingle_ByProductAndUserAsync(string userId, string productId, CancellationToken cancellationToken = default);
+    ValueTask<Cart> GetSingle_ByUserAndProductAsync(string userId, string productId, CancellationToken cancellationToken = default);
     #endregion
 
     #region [ Public Method - Create ]

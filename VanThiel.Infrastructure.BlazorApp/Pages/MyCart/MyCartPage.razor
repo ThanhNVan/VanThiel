@@ -1,0 +1,41 @@
+﻿@page "/my-cart"
+@using VanThiel.Domain.DTOs.ReturnModel
+
+@namespace VanThiel.Infrastructure.Blazor.Pages
+
+<PageTitle>My Profile</PageTitle>
+
+<h3 style="text-align:center">My Cart</h3>
+@if (Data is not null)
+{
+    <div class="grid" style="width: 100%; overflow-x:auto;">
+        <FluentDataGrid Items="@Data" Pagination="@pagination" Style="width: 1300px;" ShowHover="true">
+            <SelectColumn TGridItem="CartInfo"
+                          SelectMode="DataGridSelectMode.Multiple"
+                          Property="@(e => e.IsSelected)"
+                          OnSelect="@(e => e.Item.IsSelected = e.Selected)"
+                          SelectAll="@(Data.All(p => p.IsSelected))"
+                          SelectAllChanged="@(all => Data.ToList().ForEach(p => p.IsSelected = (all == true)))" />
+            <PropertyColumn Property="@(c => c.ProductName)" Sortable="true" Class="country-name" />
+            <PropertyColumn Property="@(c => c.Category)" Sortable="true" Align="Align.End" />
+            <PropertyColumn Property="@(c => c.Price)" Sortable="true" Align="Align.End" />
+            <PropertyColumn Property="@(c => c.Discount)" Sortable="true" Align="Align.End" />
+            <PropertyColumn Property="@(c => c.ProductInCart)" Sortable="true" Align="Align.End" />
+            <TemplateColumn Title="Actions" Align="@Align.End">
+                <FluentButton aria-label="Minus item" IconEnd="@(new Icons.Regular.Size16.Subtract())" OnClick="async () => await MinusItemAsync(context.ProductId)" />
+                <FluentButton aria-label="Add item" IconEnd="@(new Icons.Regular.Size16.ShoppingBagAdd())" OnClick="async () => await AddItemAsync(context.ProductId)" />
+                <FluentButton aria-label="Item Info" IconEnd="@(new Icons.Regular.Size16.Info())" OnClick="() => MoveToProductDetailPage(context.ProductId)" />
+                <FluentButton aria-label="Remove item" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="async () => await RemoveAllItemAsync(context.ProductId)" />
+            </TemplateColumn>
+        </FluentDataGrid>
+
+        <div>
+            <b>Total: </b>
+            @Data.Where(x => x.IsSelected).Sum(x => (x.Price * (100 - x.Discount))* x.ProductInCart / 100) $
+        </div>
+    </div>
+    <FluentButton IconEnd="@(new Icons.Regular.Size16.Payment())" >
+        Check Out
+    </FluentButton>
+    <FluentPaginator State="@pagination" />
+}

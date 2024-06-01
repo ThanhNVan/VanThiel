@@ -5,15 +5,14 @@ using Microsoft.JSInterop;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VanThiel.Domain.DTOs.ReturnModel;
 using VanThiel.Domain.Entities;
 using VanThiel.Infrastructure.Blazor.Service.Interfaces;
 
 namespace VanThiel.Infrastructure.Blazor.Pages;
 
-
-public partial class ProductDashboardPage
+public partial class MyCartPage
 {
-    #region [ Properties - Inject ]
     [Inject]
     private NavigationManager NavigationManager { get; set; }
 
@@ -34,10 +33,9 @@ public partial class ProductDashboardPage
 
     [Inject]
     public IMessageService MessageService { get; set; }
-    #endregion
 
     #region [ Properties ]
-    public IQueryable<Product> Data { get; set; }
+    public IQueryable<CartInfo> Data { get; set; }
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 12 };
     #endregion
@@ -45,7 +43,7 @@ public partial class ProductDashboardPage
     #region [ Override Methods ]
     protected override async Task OnInitializedAsync()
     {
-        this.Data = (await this.ProductService.GetMany_ActiveAsync()).AsQueryable();
+        this.Data = (await this.CartService.GetMany_ByUserAsync()).AsQueryable();
     }
     #endregion
 
@@ -59,6 +57,12 @@ public partial class ProductDashboardPage
             {
                 var message = $"Subtracted from cart";
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
+                this.Data.FirstOrDefault(x => x.ProductId == productId).ProductInCart--;
+
+                if (this.Data.FirstOrDefault(x => x.ProductId == productId).ProductInCart == 0)
+                {
+                    this.Data = this.Data.Where(x => x.ProductInCart > 0);
+                }
                 return;
             }
         } catch (Exception ex)
@@ -78,6 +82,7 @@ public partial class ProductDashboardPage
             {
                 var message = $"Added to cart";
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
+                this.Data.FirstOrDefault(x => x.ProductId == productId).ProductInCart++;
                 return;
             }
         } catch (Exception ex)
@@ -101,6 +106,7 @@ public partial class ProductDashboardPage
             {
                 var message = $"Remove from cart";
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
+                this.Data = this.Data.Where(x => x.ProductId != productId);
                 return;
             }
         } catch (Exception ex)

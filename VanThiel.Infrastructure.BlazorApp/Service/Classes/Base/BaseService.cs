@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Infrastructure.Blazor.Data;
 using VanThiel.SharedLibrary.Entity;
@@ -44,20 +45,20 @@ public abstract class BaseService
         return result;
     }
 
-    protected async ValueTask<HttpClient> CreateClientAsync(bool isAuthenticated = true) {
+    protected async ValueTask<HttpClient> CreateClientAsync(bool isAuthenticated = true, CancellationToken cancellationToken = default) {
         var clientName = "BaseClient";
         var result = this._httpClientFactory.CreateClient(clientName);
 
         if (isAuthenticated)
         {
-            var accessToken = (await this._sessionStorageService.GetItemAsync<UserSession>(nameof(UserSession))).AccessToken;
+            var accessToken = (await this._sessionStorageService.GetItemAsync<UserSession>(nameof(UserSession), cancellationToken)).AccessToken;
             result.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         return result;
     }
 
-    protected void EnsureSuccessfullStatusCode(HttpResponseMessage? response)
+    protected void EnsureSuccessfulStatusCode(HttpResponseMessage? response)
     {
         if (response is null || !response.IsSuccessStatusCode)
         {
@@ -67,10 +68,10 @@ public abstract class BaseService
         return;
     }
 
-    protected async ValueTask<ApiResult<TType>> DeserializeObjectAsync<TType>(HttpResponseMessage response)
+    protected async ValueTask<ApiResult<TType>> DeserializeObjectAsync<TType>(HttpResponseMessage response, CancellationToken cancellationToken = default)
         where TType : class
     {
-        var apiResult = JsonConvert.DeserializeObject<ApiResult<TType>>(await response.Content.ReadAsStringAsync());
+        var apiResult = JsonConvert.DeserializeObject<ApiResult<TType>>(await response.Content.ReadAsStringAsync(cancellationToken));
         return apiResult;
     }
     #endregion

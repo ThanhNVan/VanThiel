@@ -36,7 +36,7 @@ public class UserService : BaseService, IUserService
         var httpClient = await this.CreateClientAsync();
 
         var response = await httpClient.GetAsync(url);
-        EnsureSuccessfullStatusCode(response);
+        EnsureSuccessfulStatusCode(response);
 
         var apiResult = await this.DeserializeObjectAsync<UserMyProfile>(response);
 
@@ -56,7 +56,7 @@ public class UserService : BaseService, IUserService
         var httpClient = await this.CreateClientAsync();
 
         var response = await httpClient.GetAsync(url);
-        EnsureSuccessfullStatusCode(response);
+        EnsureSuccessfulStatusCode(response);
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
@@ -76,7 +76,7 @@ public class UserService : BaseService, IUserService
         var httpClient = await this.CreateClientAsync();
 
         var response = await httpClient.GetAsync(url);
-        EnsureSuccessfullStatusCode(response);
+        EnsureSuccessfulStatusCode(response);
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 

@@ -35,11 +35,11 @@ public class CartController : BaseVanThielController<Cart, ICartService>
 
     #region [ Public Method - Post ]
     [Authorize(Roles = "User")]
-    [HttpPost("add-to-cart")]
-    public async ValueTask<IActionResult> Update_ByProductAndUserAsync([FromBody] string productId, CancellationToken cancellationToken = default)
+    [HttpPost("add-single-to-cart")]
+    public async ValueTask<IActionResult> Update_AddSingleToCartAsync([FromBody] string productId, CancellationToken cancellationToken = default)
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;
-        var result = await this._service.Update_AddToCartAsync(identity, productId, cancellationToken);
+        var result = await this._service.Update_AddSingleToCartAsync(identity, productId, cancellationToken);
 
         return this.ReturnOkResult(result.ToString());  
     }
@@ -53,6 +53,16 @@ public class CartController : BaseVanThielController<Cart, ICartService>
 
         return this.ReturnOkResult(result.ToString());  
     }
+    
+    [Authorize(Roles = "User")]
+    [HttpPost("add-many-to-cart")]
+    public async ValueTask<IActionResult> Update_AddManyToCartAsync([FromBody] UpdateCart model, CancellationToken cancellationToken = default)
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        var result = await this._service.Update_AddManyToCartAsync(identity, model, cancellationToken);
+
+        return this.ReturnOkResult(result.ToString());  
+    }
     #endregion
 
     #region [ Public Method - Put ]
@@ -60,7 +70,7 @@ public class CartController : BaseVanThielController<Cart, ICartService>
 
     #region [ Public Method - Delete ]
     [Authorize(Roles = "User")]
-    [HttpDelete("cart/{productId}")]
+    [HttpDelete("{productId}")]
     public async ValueTask<IActionResult> Update_RemoveFromCartAsync(string productId, CancellationToken cancellationToken = default)
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;

@@ -106,7 +106,7 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
             return false;
         }
         dbResult.IsActive = false;
-        entity.LastUpdatedAt = DateTime.Now;
+        dbResult.LastUpdatedAt = DateTime.Now;
         context.Set<TEntity>().Update(dbResult);
         await context.SaveChangesAsync(cancellationToken);
         return true;

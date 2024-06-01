@@ -11,6 +11,7 @@ public static class ServicesExtensions
         services.AddTransient<IOrderService, OrderService>();
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<ICartService, CartService>();
         services.AddTransient<IAuthenticationService, AuthenticationService>();
     }
 }

@@ -19,10 +19,10 @@
             <AuthorizeView>
                 <Authorized>
                     <div class="top-row px-4">
+                        <FluentMessageBarProvider Section="MESSAGES_TOP" />
                         <span class="oi oi-person" aria-hidden="true"> Hello<a>@UserDisplayName(context.User.Claims)</a></span>
                     </div>
                     <article class="content px-4">
-                        <FluentMessageBarProvider Section="MESSAGES_TOP" />
                         @Body
                     </article>
                 </Authorized>
