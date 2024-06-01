@@ -34,7 +34,7 @@
             @Data.Where(x => x.IsSelected).Sum(x => (x.Price * (100 - x.Discount))* x.ProductInCart / 100) $
         </div>
     </div>
-    <FluentButton IconEnd="@(new Icons.Regular.Size16.Payment())" >
+    <FluentButton IconEnd="@(new Icons.Regular.Size16.Payment())" OnClick="async () => await CheckOutAsync()">
         Check Out
     </FluentButton>
     <FluentPaginator State="@pagination" />

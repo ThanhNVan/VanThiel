@@ -58,11 +58,13 @@ public partial class ProductDashboardPage
             if (result)
             {
                 var message = $"Subtracted from cart";
+                MessageService.Clear();
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
                 return;
             }
         } catch (Exception ex)
         {
+            MessageService.Clear();
             await MessageService.ShowMessageBarAsync(ex.Message, MessageIntent.Error, "MESSAGES_TOP");
             return;
         }
@@ -77,11 +79,13 @@ public partial class ProductDashboardPage
             if (result)
             {
                 var message = $"Added to cart";
+                MessageService.Clear();
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
                 return;
             }
         } catch (Exception ex)
         {
+            MessageService.Clear();
             await MessageService.ShowMessageBarAsync(ex.Message, MessageIntent.Error, "MESSAGES_TOP");
             return;
         }
@@ -100,11 +104,13 @@ public partial class ProductDashboardPage
             if (result)
             {
                 var message = $"Remove from cart";
+                MessageService.Clear();
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
                 return;
             }
         } catch (Exception ex)
         {
+            MessageService.Clear();
             await MessageService.ShowMessageBarAsync(ex.Message, MessageIntent.Error, "MESSAGES_TOP");
             return;
         }

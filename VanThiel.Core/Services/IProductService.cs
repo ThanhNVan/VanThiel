@@ -15,5 +15,8 @@ public interface IProductService : IBaseVanThielService<Product>
     ValueTask<IEnumerable<Product>> GetMany_ActiveAsync(CancellationToken cancellationToken = default);
     #endregion
 
+    #region [ Method - Post ]
     ValueTask<bool> AddManyAsync(IEnumerable<Product> list);
+    #endregion
+
 }

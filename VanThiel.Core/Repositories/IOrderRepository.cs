@@ -1,4 +1,8 @@
-﻿using VanThiel.Core.Repositories.Base;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
+using VanThiel.Core.Repositories.Base;
+using VanThiel.Domain.DTOs.ReturnModel;
 using VanThiel.Domain.Entities;
 
 namespace VanThiel.Core.Repositories;
@@ -12,6 +16,7 @@ public interface IOrderRepository: IBaseVanThielRepository<Order>
     #endregion
 
     #region [ Public Method - Create ]
+    ValueTask<bool> Create_TransactionAsync(IEnumerable<CartInfo> cartInfos, string userId, CancellationToken cancellationToken = default);
     #endregion
 
     #region [ Public Method - Update ]

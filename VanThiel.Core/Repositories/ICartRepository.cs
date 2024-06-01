@@ -27,5 +27,6 @@ public interface ICartRepository : IBaseVanThielRepository<Cart>
     #endregion
 
     #region [ Public Method - Validate ]
+    ValueTask<IEnumerable<CartInfo>> Validate_ProductInCartAsync(string userId, IEnumerable<string> idList, CancellationToken cancellationToken = default);
     #endregion
 }

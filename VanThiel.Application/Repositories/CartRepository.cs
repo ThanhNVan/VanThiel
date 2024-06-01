@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -72,5 +73,36 @@ public class CartRepository : BaseVanThielRepository<Cart>, ICartRepository
     #endregion
 
     #region [ Public Method - Validate ]
+    public async ValueTask<IEnumerable<CartInfo>> Validate_ProductInCartAsync(string userId, IEnumerable<string> idList, CancellationToken cancellationToken = default)
+    {
+        var result = new List<CartInfo>();
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        result = await dbContext.Carts
+                                    .Include(x => x.Product)
+                                    .Where(x => x.UserId == userId
+                                                && x.IsActive
+                                                && idList.Contains(x.Id))
+                                    .Select(x => new CartInfo
+                                    {
+                                        Id = x.Id,
+                                        Discount = x.Product.Discount,
+                                        Price = x.Product.Price,
+                                        ProductId = x.ProductId,
+                                        ProductInCart = x.Quantity,
+                                        IsSelected = x.Quantity > x.Product.Instock,
+                                        
+                                    })
+                                    .ToListAsync(cancellationToken);
+
+        var isNotValid = result.Any(x => x.IsSelected);
+
+        if (isNotValid)
+        {
+            throw new ArgumentException("Quantity in cart is greater than instock.");
+        }
+
+        return result;
+    }
     #endregion
 }

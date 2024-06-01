@@ -27,6 +27,7 @@ public static class ServiceEntensions
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<ICartService, CartService>();
+        services.AddTransient<IOrderService, OrderService>();
         services.AddTransient<JwtSecurityTokenHandler>();
 
         //services.AddTransient<HttpClientContext>();

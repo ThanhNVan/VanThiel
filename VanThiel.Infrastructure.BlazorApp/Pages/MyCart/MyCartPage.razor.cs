@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.FluentUI.AspNetCore.Components;
-using Microsoft.JSInterop;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VanThiel.Domain.DTOs.ReturnModel;
-using VanThiel.Domain.Entities;
 using VanThiel.Infrastructure.Blazor.Service.Interfaces;
 
 namespace VanThiel.Infrastructure.Blazor.Pages;
@@ -17,19 +14,10 @@ public partial class MyCartPage
     private NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    private IProductService ProductService { get; set; }
+    private IOrderService OrderService { get; set; }
 
     [Inject]
     private ICartService CartService { get; set; }
-
-    [Inject]
-    private IAuthenticationService AuthenticationService { get; set; }
-
-    [Inject]
-    public IJSRuntime JSRuntime { get; set; }
-
-    [Inject]
-    public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
     [Inject]
     public IMessageService MessageService { get; set; }
@@ -56,6 +44,7 @@ public partial class MyCartPage
             if (result)
             {
                 var message = $"Subtracted from cart";
+                MessageService.Clear();
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
                 this.Data.FirstOrDefault(x => x.ProductId == productId).ProductInCart--;
 
@@ -67,6 +56,7 @@ public partial class MyCartPage
             }
         } catch (Exception ex)
         {
+            MessageService.Clear();
             await MessageService.ShowMessageBarAsync(ex.Message, MessageIntent.Error, "MESSAGES_TOP");
             return;
         }
@@ -81,12 +71,14 @@ public partial class MyCartPage
             if (result)
             {
                 var message = $"Added to cart";
+                MessageService.Clear();
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
                 this.Data.FirstOrDefault(x => x.ProductId == productId).ProductInCart++;
                 return;
             }
         } catch (Exception ex)
         {
+            MessageService.Clear();
             await MessageService.ShowMessageBarAsync(ex.Message, MessageIntent.Error, "MESSAGES_TOP");
             return;
         }
@@ -105,12 +97,38 @@ public partial class MyCartPage
             if (result)
             {
                 var message = $"Remove from cart";
+                MessageService.Clear();
                 await MessageService.ShowMessageBarAsync(message, MessageIntent.Success, "MESSAGES_TOP");
                 this.Data = this.Data.Where(x => x.ProductId != productId);
                 return;
             }
         } catch (Exception ex)
         {
+            MessageService.Clear();
+            await MessageService.ShowMessageBarAsync(ex.Message, MessageIntent.Error, "MESSAGES_TOP");
+            return;
+        }
+    }
+
+    private async Task CheckOutAsync()
+    {
+        try
+        {
+            var payload = this.Data.Where(x => x.IsSelected).Select(x => x.Id).ToList();
+            var result = await this.OrderService.Post_CheckOutAsync(payload);
+            
+            if (result) 
+            {
+                MessageService.Clear();
+                await MessageService.ShowMessageBarAsync("Order successfully", MessageIntent.Success, "MESSAGES_TOP");
+            }
+
+            this.Data = this.Data.Where(x => !x.IsSelected);
+            return;
+
+        } catch (Exception ex)
+        {
+            MessageService.Clear();
             await MessageService.ShowMessageBarAsync(ex.Message, MessageIntent.Error, "MESSAGES_TOP");
             return;
         }
