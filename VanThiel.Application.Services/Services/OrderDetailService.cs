@@ -13,4 +13,16 @@ public class OrderDetailService : BaseVanThielService<OrderDetail, IOrderDetailR
     {
     }
     #endregion
+
+    #region [ Public Method - Get ]
+    #endregion
+
+    #region [ Public Method - Post ]
+    #endregion
+
+    #region [ Public Method - Put ]
+    #endregion
+
+    #region [ Public Method - Delete ]
+    #endregion
 }

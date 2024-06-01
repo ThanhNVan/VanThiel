@@ -25,7 +25,7 @@ public abstract class BaseVanThielController<TEntity, TService> : ControllerBase
     #endregion
 
     #region [ Protected Methods ]
-    protected IActionResult ReturnOkResult<T>(T data)
+    protected IActionResult GetOkResult<T>(T data)
         where T : class
     {
         var result = new ApiResult<T>();

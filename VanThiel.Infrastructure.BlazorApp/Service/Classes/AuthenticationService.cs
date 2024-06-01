@@ -1,8 +1,5 @@
 ﻿using Blazored.SessionStorage;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
@@ -10,7 +7,6 @@ using System.Threading.Tasks;
 using VanThiel.Domain.DTOs;
 using VanThiel.Domain.DTOs.RequestModel;
 using VanThiel.Infrastructure.Blazor.Service.Interfaces;
-using VanThiel.SharedLibrary.Entity;
 
 namespace VanThiel.Infrastructure.Blazor.Service.Classes;
 
@@ -43,13 +39,7 @@ public class AuthenticationService : BaseService, IAuthenticationService
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = apiResult.Data;
-            return result;
-        }
-
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult);
     }
     public async ValueTask<string> UserSignUpAsync(SignUpModel model, CancellationToken cancellationToken = default)
     {
@@ -63,13 +53,7 @@ public class AuthenticationService : BaseService, IAuthenticationService
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = apiResult.Data;
-            return result;
-        }
-
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult);
     }
     #endregion
 
@@ -85,13 +69,7 @@ public class AuthenticationService : BaseService, IAuthenticationService
         EnsureSuccessfulStatusCode(response);
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = apiResult.Data;
-            return result;
-        }
-
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult);
     }
     #endregion
 

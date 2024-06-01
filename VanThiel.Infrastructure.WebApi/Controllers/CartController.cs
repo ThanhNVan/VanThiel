@@ -29,7 +29,7 @@ public class CartController : BaseVanThielController<Cart, ICartService>
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         var result = await this._service.GetMany_ByUserAsync(identity, cancellationToken);
 
-        return this.ReturnOkResult(result);
+        return this.GetOkResult(result);
     }
     #endregion
 
@@ -41,7 +41,7 @@ public class CartController : BaseVanThielController<Cart, ICartService>
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         var result = await this._service.Update_AddSingleToCartAsync(identity, productId, cancellationToken);
 
-        return this.ReturnOkResult(result.ToString());  
+        return this.GetOkResult(result.ToString());  
     }
     
     [Authorize(Roles = "User")]
@@ -51,7 +51,7 @@ public class CartController : BaseVanThielController<Cart, ICartService>
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         var result = await this._service.Update_SubtractFromCartAsync(identity, productId, cancellationToken);
 
-        return this.ReturnOkResult(result.ToString());  
+        return this.GetOkResult(result.ToString());  
     }
     
     [Authorize(Roles = "User")]
@@ -61,7 +61,7 @@ public class CartController : BaseVanThielController<Cart, ICartService>
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         var result = await this._service.Update_AddManyToCartAsync(identity, model, cancellationToken);
 
-        return this.ReturnOkResult(result.ToString());  
+        return this.GetOkResult(result.ToString());  
     }
     #endregion
 
@@ -76,7 +76,7 @@ public class CartController : BaseVanThielController<Cart, ICartService>
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         var result = await this._service.Update_RemoveFromCartAsync(identity, productId, cancellationToken);
 
-        return this.ReturnOkResult(result.ToString());
+        return this.GetOkResult(result.ToString());
     }
     #endregion
 }

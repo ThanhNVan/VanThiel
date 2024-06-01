@@ -37,12 +37,7 @@ public class CartService : BaseService, ICartService
 
         var apiResult = await this.DeserializeObjectAsync<List<CartInfo>>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = apiResult.Data;
-            return result;
-        }
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult);
     }
     #endregion
 
@@ -60,12 +55,7 @@ public class CartService : BaseService, ICartService
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = bool.Parse(apiResult.Data);
-            return result;
-        }
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult, true);
     }
 
     public async ValueTask<bool> Update_SubtractFromCartAsync(string productId, CancellationToken cancellationToken = default)
@@ -81,12 +71,7 @@ public class CartService : BaseService, ICartService
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = bool.Parse(apiResult.Data);
-            return result;
-        }
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult, true);
     }
     
     public async ValueTask<bool> Update_AddManyToCartAsync(UpdateCart model, CancellationToken cancellationToken = default)
@@ -102,12 +87,7 @@ public class CartService : BaseService, ICartService
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = bool.Parse(apiResult.Data);
-            return result;
-        }
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult, true);
     }
     #endregion
 
@@ -128,12 +108,7 @@ public class CartService : BaseService, ICartService
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = bool.Parse(apiResult.Data);
-            return result;
-        }
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult, true);
     }
     #endregion
 }

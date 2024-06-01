@@ -24,6 +24,75 @@ public class OrderRepository : BaseVanThielRepository<Order>, IOrderRepository
     #endregion
 
     #region [ Public Method - Get Many ]
+    public async ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
+    {
+        var result = new List<OrderInfo>();
+
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        result = await dbContext.Orders
+                        .Include(x => x.User)
+                        .Include(x => x.OrderDetails)
+                            .ThenInclude(x => x.Product)
+                        .Where(x => x.IsActive)
+                        .Select(x => new OrderInfo 
+                        { 
+                            Id = x.Id,
+                            UserName = x.User.Fullname,
+                            UserId = x.UserId,
+                            TotalPrice = x.TotalPrice,
+                            PaymentStatus = x.PaymentStatus,
+                            ShippingStatus = x.ShippingStatus,
+                            Details = x.OrderDetails.Where(x => x.IsActive)
+                                            .Select(d => new OrderDetailInfo 
+                                            { 
+                                                Id = d.Id,
+                                                ProductId = d.ProductId,
+                                                ProductName = d.Product.Name,
+                                                Category = d.Product.Category,
+                                                Discount = d.Product.Discount,
+                                                Quantity = d.Quantity,
+                                                TotalPrice = d.TotalPrice.GetValueOrDefault(),
+                                            }).ToList()    
+                        })
+                        .ToListAsync();
+
+        return result;
+    }
+    
+    public async ValueTask<IEnumerable<MyOrderInfo>> GetMany_ByUserAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var result = new List<MyOrderInfo>();
+
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        result = await dbContext.Orders
+                        .Include(x => x.OrderDetails)
+                            .ThenInclude(x => x.Product)
+                        .Where(x => x.UserId == userId
+                                    && x.IsActive)
+                        .Select(x => new MyOrderInfo 
+                        { 
+                            Id = x.Id,
+                            TotalPrice = x.TotalPrice,
+                            PaymentStatus = x.PaymentStatus,
+                            ShippingStatus = x.ShippingStatus,
+                            Details = x.OrderDetails.Where(x => x.IsActive)
+                                            .Select(d => new OrderDetailInfo 
+                                            { 
+                                                Id = d.Id,
+                                                ProductId = d.ProductId,
+                                                ProductName = d.Product.Name,
+                                                Category = d.Product.Category,
+                                                Discount = d.Product.Discount,
+                                                Quantity = d.Quantity,
+                                                TotalPrice = d.TotalPrice.GetValueOrDefault(),
+                                            }).ToList()    
+                        })
+                        .ToListAsync();
+
+        return result;
+    }
     #endregion
     
     #region [ Public Method - Get Single ]
@@ -51,6 +120,7 @@ public class OrderRepository : BaseVanThielRepository<Order>, IOrderRepository
                 Quantity = cartInfo.ProductInCart,
                 TotalPrice = cartInfo.Price * (100 - cartInfo.Discount) * cartInfo.ProductInCart,
             };
+            orderDetailList.Add(orderDetail);
 
             var product = await dbContext.Products.FindAsync(cartInfo.ProductId, cancellationToken);
             product.Instock -= cartInfo.ProductInCart;

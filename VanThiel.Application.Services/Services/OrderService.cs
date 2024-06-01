@@ -27,8 +27,22 @@ public class OrderService : BaseVanThielService<Order, IOrderRepository>, IOrder
     #endregion
 
     #region [ Public Method - Get ]
+    public ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
+    {
+        return this._repository.GetMany_ActiveAsync(cancellationToken);
+    }
+
+    public ValueTask<IEnumerable<MyOrderInfo>> GetMany_ByUserAsync(ClaimsIdentity identity, CancellationToken cancellationToken = default)
+    {
+        GuardParametter.IsValidIdentity(identity);
+
+        var userId = identity.FindFirst("UserId").Value;
+        GuardParametter.IsValidJwtClaim(userId);
+
+        return this._repository.GetMany_ByUserAsync(userId, cancellationToken);
+    }
     #endregion
-    
+
     #region [ Public Method - Post ]
     public async ValueTask<bool> Post_CheckOutAsync(ClaimsIdentity identity, IEnumerable<string> cartIdList, CancellationToken cancellationToken = default )
     {

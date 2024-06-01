@@ -31,6 +31,7 @@ public partial class MyCartPage
     #region [ Override Methods ]
     protected override async Task OnInitializedAsync()
     {
+        MessageService.Clear();
         this.Data = (await this.CartService.GetMany_ByUserAsync()).AsQueryable();
     }
     #endregion
@@ -115,6 +116,14 @@ public partial class MyCartPage
         try
         {
             var payload = this.Data.Where(x => x.IsSelected).Select(x => x.Id).ToList();
+
+            if (payload is null || payload.Count == 0)
+            {
+                MessageService.Clear();
+                await MessageService.ShowMessageBarAsync("Please select at least one item", MessageIntent.Error, "MESSAGES_TOP");
+                return;
+            }
+
             var result = await this.OrderService.Post_CheckOutAsync(payload);
             
             if (result) 

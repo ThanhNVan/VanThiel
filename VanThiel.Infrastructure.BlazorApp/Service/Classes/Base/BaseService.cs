@@ -1,4 +1,5 @@
 ﻿using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -62,7 +63,7 @@ public abstract class BaseService
     {
         if (response is null || !response.IsSuccessStatusCode)
         {
-            throw new Exception("Something is wrong please try later.");
+            throw new ArgumentException("Something is wrong please try later.");
         }
 
         return;
@@ -73,6 +74,29 @@ public abstract class BaseService
     {
         var apiResult = JsonConvert.DeserializeObject<ApiResult<TType>>(await response.Content.ReadAsStringAsync(cancellationToken));
         return apiResult;
+    }
+
+    protected TType EnsureCustomSuccessStatusCode<TType>(ApiResult<TType> apiResult)
+        where TType : class
+    {
+        if (apiResult.StatusCode != nameof(StatusCodes.Status200OK))
+        {
+            throw new Exception($"{apiResult.Message}");
+        }
+
+        return apiResult.Data;
+    }
+    
+    protected bool EnsureCustomSuccessStatusCode(ApiResult<string> apiResult, bool isBool)
+    {
+        if (apiResult.StatusCode != nameof(StatusCodes.Status200OK))
+        {
+            throw new Exception($"{apiResult.Message}");
+        }
+      
+        var result = bool.Parse(apiResult.Data);
+        
+        return result;
     }
     #endregion
 }

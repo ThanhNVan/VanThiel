@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 using VanThiel.Core.Services;
 using VanThiel.Domain.Entities;
 using VanThiel.Infrastructure.WebApi.Base;
-using Microsoft.AspNetCore.Authorization;
 
 namespace VanThiel.Infrastructure.WebApi;
 
@@ -29,11 +29,29 @@ public class OrderController : BaseVanThielController<Order, IOrderService>
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         var result = await this._service.Post_CheckOutAsync(identity, cartIdList, cancellationToken);
 
-        return this.ReturnOkResult(result.ToString());
+        return this.GetOkResult(result.ToString());
     }
     #endregion
 
     #region [ Public Method - Post ]
+    [Authorize(Roles = "User")]
+    [HttpGet("many-active")]
+    public async ValueTask<IActionResult> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await this._service.GetMany_ActiveAsync(cancellationToken);
+
+        return this.GetOkResult(result);
+    }
+
+    [Authorize(Roles = "User")]
+    [HttpGet("many-by-user")]
+    public async ValueTask<IActionResult> GetMany_ByUserAsync(CancellationToken cancellationToken = default)
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        var result = await this._service.GetMany_ByUserAsync(identity, cancellationToken);
+
+        return this.GetOkResult(result);
+    }
     #endregion
 
     #region [ Public Method - Put ]

@@ -1,0 +1,24 @@
+﻿@page "/my-order"
+@using VanThiel.Domain.DTOs.ReturnModel
+
+@namespace VanThiel.Infrastructure.Blazor.Pages
+
+<PageTitle>My Orders</PageTitle>
+<h3 style="text-align:center">My Orders</h3>
+@if (Data is not null)
+{
+    <div class="grid" style="width: 100%; overflow-x:auto;">
+        <FluentDataGrid Items="@Data" Pagination="@Pagination" Style="width: 1300px;" ShowHover="true">
+            <PropertyColumn Property="@(c => c.TotalPrice)" Sortable="true" Class="country-name" />
+            <PropertyColumn Property="@(c => c.PaymentStatus)" Sortable="true" Align="Align.End" />
+            <PropertyColumn Property="@(c => c.ShippingStatus)" Sortable="true" Align="Align.End" />
+            
+            <TemplateColumn Title="Actions" Align="@Align.End">
+                <FluentButton aria-label="Item Info" IconEnd="@(new Icons.Regular.Size16.Info())" OnClick="() => MoveToOrderDetailPage(context.Id)" />
+            </TemplateColumn>
+        </FluentDataGrid>
+
+    </div>
+
+    <FluentPaginator State="@Pagination" />
+}

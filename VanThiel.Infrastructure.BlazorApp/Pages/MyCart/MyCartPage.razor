@@ -9,7 +9,8 @@
 @if (Data is not null)
 {
     <div class="grid" style="width: 100%; overflow-x:auto;">
-        <FluentDataGrid Items="@Data" Pagination="@pagination" Style="width: 1300px;" ShowHover="true">
+        <FluentDataGrid Items="@Data" Style="width: 1300px;" ShowHover="true">
+            @* Pagination="@pagination" *@
             <SelectColumn TGridItem="CartInfo"
                           SelectMode="DataGridSelectMode.Multiple"
                           Property="@(e => e.IsSelected)"
@@ -37,5 +38,5 @@
     <FluentButton IconEnd="@(new Icons.Regular.Size16.Payment())" OnClick="async () => await CheckOutAsync()">
         Check Out
     </FluentButton>
-    <FluentPaginator State="@pagination" />
+    //<FluentPaginator State="@pagination" />
 }

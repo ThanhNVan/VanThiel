@@ -1,21 +1,19 @@
 ﻿using Blazored.SessionStorage;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
-using System.Threading;
-using VanThiel.Infrastructure.Blazor.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
 using System.Net.Http.Json;
-using System;
+using System.Threading;
+using System.Threading.Tasks;
+using VanThiel.Domain.DTOs.ReturnModel;
+using VanThiel.Infrastructure.Blazor.Service.Interfaces;
 
 namespace VanThiel.Infrastructure.Blazor.Service.Classes;
 
 public class OrderService : BaseService, IOrderService
 {
     #region [ Ctor ]
-    public OrderService(IHttpClientFactory httpClientFactory, ILogger<OrderService> logger, ISessionStorageService sessionStorageService) 
+    public OrderService(IHttpClientFactory httpClientFactory, ILogger<OrderService> logger, ISessionStorageService sessionStorageService)
         : base(httpClientFactory, logger, sessionStorageService)
     {
         this._entityUrl = "api/v1/order";
@@ -23,6 +21,37 @@ public class OrderService : BaseService, IOrderService
     #endregion
 
     #region [ Public Method - Get ]
+    public async ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
+    {
+        var result = default(bool);
+        var url = this._entityUrl + $"/many-active";
+
+        var httpClient = await this.CreateClientAsync();
+
+        var response = await httpClient.GetAsync(url, cancellationToken);
+
+        this.EnsureSuccessfulStatusCode(response);
+
+        var apiResult = await this.DeserializeObjectAsync<IEnumerable<OrderInfo>>(response);
+
+        return this.EnsureCustomSuccessStatusCode(apiResult);
+    }
+
+    public async ValueTask<IEnumerable<MyOrderInfo>> GetMany_ByUserAsync(CancellationToken cancellationToken = default)
+    {
+        var result = default(bool);
+        var url = this._entityUrl + $"/many-active";
+
+        var httpClient = await this.CreateClientAsync();
+
+        var response = await httpClient.GetAsync(url, cancellationToken);
+
+        this.EnsureSuccessfulStatusCode(response);
+
+        var apiResult = await this.DeserializeObjectAsync<IEnumerable<OrderInfo>>(response);
+
+        return this.EnsureCustomSuccessStatusCode(apiResult);
+    }
     #endregion
 
     #region [ Public Method - Post ]
@@ -39,12 +68,7 @@ public class OrderService : BaseService, IOrderService
 
         var apiResult = await this.DeserializeObjectAsync<string>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = bool.Parse(apiResult.Data);
-            return result;
-        }
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult, true);
     }
     #endregion
 

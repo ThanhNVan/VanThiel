@@ -28,7 +28,7 @@ public class UserController : BaseVanThielController<User, IUserService>
     {
         var data = await this._service.GetManyAllUsersAsync(cancellationToken);
 
-        return this.ReturnOkResult(data);
+        return this.GetOkResult(data);
     }
 
     [Authorize(Roles = "User")]
@@ -38,7 +38,7 @@ public class UserController : BaseVanThielController<User, IUserService>
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         var data = await this._service.GetSingle_MyProfileAsync(identity, cancellationToken);
 
-        return this.ReturnOkResult(data);
+        return this.GetOkResult(data);
     }
 
     [HttpGet("existed-email/newEmail={email}&currentEmail={currentEmail}")]
@@ -46,7 +46,7 @@ public class UserController : BaseVanThielController<User, IUserService>
     {
         var data = await this._service.GetSingle_IsExistEmailAsync(email, currentEmail, cancellationToken);
 
-        return this.ReturnOkResult(data.ToString());
+        return this.GetOkResult(data.ToString());
     }
     
     [HttpGet("existed-phone/newPhone={phone}&&currentPhone={currentPhone}")]
@@ -54,7 +54,7 @@ public class UserController : BaseVanThielController<User, IUserService>
     {
         var data = await this._service.GetSingle_IsExistPhoneNumberAsync(phone, currentPhone,cancellationToken);
 
-        return this.ReturnOkResult(data.ToString());
+        return this.GetOkResult(data.ToString());
     }
     #endregion
 

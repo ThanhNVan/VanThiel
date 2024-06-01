@@ -1,9 +1,5 @@
 ﻿using Blazored.SessionStorage;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -38,14 +34,9 @@ public class ProductService : BaseService, IProductService
 
         var apiResult = await this.DeserializeObjectAsync<PagingResult<Product>>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = apiResult.Data;
-            return result;
-        }
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult);
     }
-    
+
     public async ValueTask<IEnumerable<Product>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
     {
         var result = default(IEnumerable<Product>);
@@ -59,12 +50,7 @@ public class ProductService : BaseService, IProductService
 
         var apiResult = await this.DeserializeObjectAsync<IEnumerable<Product>>(response);
 
-        if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
-        {
-            result = apiResult.Data;
-            return result;
-        }
-        throw new Exception($"{apiResult.Message}");
+        return this.EnsureCustomSuccessStatusCode(apiResult);
     }
     #endregion
 
