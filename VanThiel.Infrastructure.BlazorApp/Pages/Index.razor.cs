@@ -1,6 +1,7 @@
 ﻿using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
@@ -27,6 +28,9 @@ public partial class Index
 
     [Inject]
     public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    [Inject]
+    public IMessageService MessageService { get; set; }
     #endregion
 
     #region [ Properties ]
@@ -55,8 +59,7 @@ public partial class Index
             NavigationManager.NavigateTo("/my-profile");
         } catch (Exception ex)
         {
-
-            this.Warning = ex.Message;
+            await MessageService.ShowMessageBarAsync(ex.Message, MessageIntent.Warning, "MESSAGES_TOP");
         }
 
         return;

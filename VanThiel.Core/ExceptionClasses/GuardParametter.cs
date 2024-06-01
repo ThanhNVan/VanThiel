@@ -76,4 +76,12 @@ public static class GuardParametter
             throw new UnauthorizedException("You are not allowed to process this Api, Please sign in to continue");
         }
     }
+    
+    public static void IsValidPage(int value)
+    {
+        if (value <= -1)
+        {
+            throw new ArgumentException("Page cannot be negative.");
+        }    
+    }
 }
