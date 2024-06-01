@@ -31,8 +31,8 @@ public static class AuthenticationPolicies
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidAudience = configuration["JwtSettingModels:Audience"],
-                    ValidIssuer = configuration["JwtSettingModels:Issuer"],
+                    ValidAudience = configuration["JwtModels:Audience"],
+                    ValidIssuer = configuration["JwtModels:Issuer"],
                     ValidateIssuerSigningKey = false,
                     IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
 

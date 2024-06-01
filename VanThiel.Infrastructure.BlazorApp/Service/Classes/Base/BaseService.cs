@@ -1,5 +1,6 @@
 ﻿using Blazored.SessionStorage;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ public abstract class BaseService
     }
     #endregion
 
-    #region [ Private Methods -  ]
+    #region [ Protected Methods -  ]
     protected HttpClient CreateClient(string clientName = "BaseClient", string accessToken = "")
     {
         // RoutingUrl.BaseClientName = "BaseClientName"
@@ -52,6 +53,16 @@ public abstract class BaseService
         }
 
         return result;
+    }
+
+    protected void EnsureSuccessfullStatusCode(HttpResponseMessage response)
+    {
+        if (response.IsSuccessStatusCode)
+        {
+            return;
+        }
+
+        throw new Exception("Something is wrong please try later.");
     }
     #endregion
 }

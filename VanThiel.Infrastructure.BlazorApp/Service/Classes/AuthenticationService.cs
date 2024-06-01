@@ -1,28 +1,26 @@
-﻿using System.Threading.Tasks;
-using System.Threading;
-using VanThiel.Domain.DTOs.RequestModel;
-using VanThiel.Infrastructure.Blazor.Data;
-using System.Net.Http;
-using Microsoft.Extensions.Logging;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using Newtonsoft.Json;
-using VanThiel.SharedLibrary.Entity;
+﻿using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
-using VanThiel.Infrastructure.Blazor.Service.Interfaces;
-using Blazored.SessionStorage;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using VanThiel.Domain.DTOs;
+using VanThiel.Domain.DTOs.RequestModel;
+using VanThiel.Infrastructure.Blazor.Service.Interfaces;
+using VanThiel.SharedLibrary.Entity;
 
 namespace VanThiel.Infrastructure.Blazor.Service.Classes;
 
-public class AuthenticationService :BaseService, IAuthenticationService
+public class AuthenticationService : BaseService, IAuthenticationService
 {
     #region [ CTor ]
     public AuthenticationService(IHttpClientFactory httpClientFactory,
                                 ILogger<AuthenticationService> logger,
-                                ISessionStorageService sessionStorageService) 
-        : base(httpClientFactory, logger, sessionStorageService)    
+                                ISessionStorageService sessionStorageService)
+        : base(httpClientFactory, logger, sessionStorageService)
     {
         this._entityUrl = "api/v1/authentication";
 
@@ -41,6 +39,7 @@ public class AuthenticationService :BaseService, IAuthenticationService
         var httpClient = this.CreateClient();
 
         var response = await httpClient.PostAsJsonAsync(url, model);
+        EnsureSuccessfullStatusCode(response);
 
         var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
 
@@ -60,7 +59,7 @@ public class AuthenticationService :BaseService, IAuthenticationService
         var httpClient = this.CreateClient();
 
         var response = await httpClient.PostAsJsonAsync(url, model);
-
+        EnsureSuccessfullStatusCode(response);
         var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
@@ -82,7 +81,7 @@ public class AuthenticationService :BaseService, IAuthenticationService
         var httpClient = this.CreateClient();
 
         var response = await httpClient.PutAsJsonAsync(url, model);
-
+        EnsureSuccessfullStatusCode(response);
         var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))

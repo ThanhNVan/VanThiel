@@ -18,10 +18,14 @@ public static class ServiceEntensions
             clients.BaseAddress = new Uri(configuration["BaseUrl"]);
         });
 
+        var pagingSettings = new PagingSettings();
+        configuration.GetSection("PagingSettings").Bind(pagingSettings);
+        services.AddSingleton(pagingSettings);
 
         services.AddTransient<AuthenticationStateProvider, AuthenticationProvider>();
         services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IProductService, ProductService>();
         services.AddTransient<JwtSecurityTokenHandler>();
 
         //services.AddTransient<HttpClientContext>();

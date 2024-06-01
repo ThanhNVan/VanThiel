@@ -36,6 +36,7 @@ public class UserService : BaseService, IUserService
         var httpClient = await this.CreateClientAsync();
 
         var response = await httpClient.GetAsync(url);
+        EnsureSuccessfullStatusCode(response);
 
         var apiResult = JsonConvert.DeserializeObject<ApiResult<UserMyProfile>>(await response.Content.ReadAsStringAsync());
 
@@ -55,6 +56,7 @@ public class UserService : BaseService, IUserService
         var httpClient = await this.CreateClientAsync();
 
         var response = await httpClient.GetAsync(url);
+        EnsureSuccessfullStatusCode(response);
 
         var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
 
@@ -74,6 +76,7 @@ public class UserService : BaseService, IUserService
         var httpClient = await this.CreateClientAsync();
 
         var response = await httpClient.GetAsync(url);
+        EnsureSuccessfullStatusCode(response);
 
         var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
 
