@@ -64,10 +64,10 @@ public partial class ProductDashboardPage
 
         this.Data = PagingResult.Data.AsQueryable();
     }
-
     #endregion
-    #region []
-    public async Task GoToPageAsync(int capturedIndex)
+
+    #region [ Private - Methods ]
+    private async Task GoToPageAsync(int capturedIndex)
     {
         this.PagingResult = await this.ProductService.GetMany_PagingAsync(capturedIndex + 1);
         await Pagination.SetCurrentPageIndexAsync(capturedIndex);
@@ -84,5 +84,25 @@ public partial class ProductDashboardPage
 
     private string AriaLabel(int pageIndex)
         => $"Go to page {pageIndex}";
+
+    private async Task MinusItemAsync(string productId)
+    {
+
+    }
+
+    private async Task AddItemAsync(string productId)
+    {
+
+    }
+
+    private void MoveToProductDetailPage(string productId)
+    {
+
+    }
+
+    private async Task RemoveAllItemAsync(string productId)
+    {
+
+    }
     #endregion
 }

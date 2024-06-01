@@ -50,5 +50,9 @@ public class User : BaseEntity
     [JsonIgnore]
     [InverseProperty("User")]
     public virtual ICollection<Order>? Orders { get; set; }
+    
+    [JsonIgnore]
+    [InverseProperty("User")]
+    public virtual ICollection<Cart>? Carts { get; set; }
     #endregion
 }

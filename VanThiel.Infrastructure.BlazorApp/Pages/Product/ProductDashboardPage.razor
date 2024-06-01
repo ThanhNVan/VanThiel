@@ -2,9 +2,11 @@
 @namespace VanThiel.Infrastructure.Blazor.Pages
 
 <PageTitle>Product Dashboard</PageTitle>
+
+<h3 style="text-align:center">Product Dashboard</h3>
+
 @if (Data is not null)
 {
-
     <div class="grid" style="width: 100%; overflow-x:auto;">
         <FluentDataGrid Items="@Data" Pagination="@Pagination" Style="width: 1300px;" >
             <PropertyColumn Property="@(c => c.Name)" Sortable="true" Class="country-name" />
@@ -12,13 +14,19 @@
             <PropertyColumn Property="@(c => c.Price)" Sortable="true" Align="Align.End" />
             <PropertyColumn Property="@(c => c.Discount)" Sortable="true" Align="Align.End" />
             <PropertyColumn Property="@(c => c.Instock)" Sortable="true" Align="Align.End" />
+            <TemplateColumn Title="Actions" Align="@Align.End">
+                <FluentButton aria-label="Minus item" IconEnd="@(new Icons.Regular.Size16.Subtract())" OnClick="async () => await MinusItemAsync(context.Id)"/>
+                <FluentButton aria-label="Add item" IconEnd="@(new Icons.Regular.Size16.ShoppingBagAdd())" OnClick="async () => await AddItemAsync(context.Id)" />
+                <FluentButton aria-label="Item Info" IconEnd="@(new Icons.Regular.Size16.Info())" OnClick="() => MoveToProductDetailPage(context.Id)" />
+                <FluentButton aria-label="Remove item" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="async () => await RemoveAllItemAsync(context.Id)" />
+            </TemplateColumn>
         </FluentDataGrid>
     </div>
 }
 
 @if (Pagination is not null)
 {
-    <div class="page-buttons">
+    <div class="page-buttons" style="margin-top: 20px">
         Page:
         @if (Pagination.TotalItemCount.HasValue)
         {

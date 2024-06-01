@@ -49,6 +49,7 @@ public static class ServicesExtensions
         services.AddTransient<IOrderRepository, OrderRepository>();
         services.AddTransient<IProductRepository, ProductRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<ICartRepository, CartRepository>();
         services.AddTransient<RepositoryContext>();
     }
 }

@@ -31,7 +31,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     {
         var result = new PagingResult<User>();
 
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         var data = await dbContext.Users.ToListAsync(cancellationToken);
 
@@ -49,7 +49,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     public async ValueTask<UserAccessInfo> GetSingleUserAccessInfoAsync(SignInModel model, CancellationToken cancellationToken = default)
     {
         var result = default(UserAccessInfo);
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         var dbUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == model.Email
                                                     && x.PasswordHash == model.Password
@@ -70,7 +70,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     public async ValueTask<UserMyProfile> GetSingle_MyProfileAsync(string userId, CancellationToken cancellationToken = default)
     {
         var result = default(UserMyProfile);
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         var dbUser = await dbContext.Users.FindAsync(userId, cancellationToken);
 
@@ -92,7 +92,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     public async ValueTask<bool> IsExistedEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         var result = default(bool);
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         result = await dbContext.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower(), cancellationToken);
 
@@ -102,7 +102,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     public async ValueTask<bool> IsExistedPhoneAsync(string phone, CancellationToken cancellationToken = default)
     {
         var result = default(bool);
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         result = await dbContext.Users.AnyAsync(x => x.PhoneNumber.ToLower() == phone.ToLower(), cancellationToken);
 
@@ -114,7 +114,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     public async ValueTask<UserAccessInfo> CreateUserAsync(SignUpModel model, CancellationToken cancellationToken = default)
     {
         var result = default(UserAccessInfo);
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         var user = new User { 
             Id = Guid.NewGuid().ToString(),
@@ -149,7 +149,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     {
         var result = default(UserAccessInfo);
 
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
         var dbEntity = await dbContext.Users.FindAsync(model.Id);
     
         dbEntity.PhoneNumber = model.PhoneNumber;
@@ -176,7 +176,7 @@ public class UserRepository : BaseVanThielRepository<User>, IUserRepository
     #region [ Public Method - Validate ]
     public async Task IsValidUserAsync(string email, CancellationToken cancellationToken = default)
     {
-        var dbContext = await this.GetDbContextAsync(cancellationToken);
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
 
         var dbUser = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
 

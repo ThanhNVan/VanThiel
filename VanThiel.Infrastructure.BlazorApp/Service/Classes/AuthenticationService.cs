@@ -41,7 +41,7 @@ public class AuthenticationService : BaseService, IAuthenticationService
         var response = await httpClient.PostAsJsonAsync(url, model);
         EnsureSuccessfullStatusCode(response);
 
-        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+        var apiResult = await this.DeserializeObjectAsync<string>(response);
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
         {
@@ -60,7 +60,8 @@ public class AuthenticationService : BaseService, IAuthenticationService
 
         var response = await httpClient.PostAsJsonAsync(url, model);
         EnsureSuccessfullStatusCode(response);
-        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+
+        var apiResult = await this.DeserializeObjectAsync<string>(response);
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
         {
@@ -82,7 +83,7 @@ public class AuthenticationService : BaseService, IAuthenticationService
 
         var response = await httpClient.PutAsJsonAsync(url, model);
         EnsureSuccessfullStatusCode(response);
-        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+        var apiResult = await this.DeserializeObjectAsync<string>(response);
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
         {

@@ -87,6 +87,7 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
         cancellationToken.ThrowIfCancellationRequested();
 
         using var context = await this.GetDbContextAsync(cancellationToken);
+        entity.LastUpdatedAt = DateTime.Now;
         context.Set<TEntity>().Update(entity);
         await context.SaveChangesAsync(cancellationToken);
         return true;
@@ -105,6 +106,7 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
             return false;
         }
         dbResult.IsActive = false;
+        entity.LastUpdatedAt = DateTime.Now;
         context.Set<TEntity>().Update(dbResult);
         await context.SaveChangesAsync(cancellationToken);
         return true;
@@ -123,6 +125,7 @@ public abstract class BaseEntityRepository<TEntity, TDbContext> : IBaseEntityRep
             return false;
         }
         dbResult.IsActive = true;
+        dbResult.LastUpdatedAt = DateTime.Now;
         context.Set<TEntity>().Update(dbResult);
         await context.SaveChangesAsync(cancellationToken);
         return true;

@@ -38,7 +38,7 @@ public class UserService : BaseService, IUserService
         var response = await httpClient.GetAsync(url);
         EnsureSuccessfullStatusCode(response);
 
-        var apiResult = JsonConvert.DeserializeObject<ApiResult<UserMyProfile>>(await response.Content.ReadAsStringAsync());
+        var apiResult = await this.DeserializeObjectAsync<UserMyProfile>(response);
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
         {
@@ -58,7 +58,7 @@ public class UserService : BaseService, IUserService
         var response = await httpClient.GetAsync(url);
         EnsureSuccessfullStatusCode(response);
 
-        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+        var apiResult = await this.DeserializeObjectAsync<string>(response);
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
         {
@@ -78,7 +78,7 @@ public class UserService : BaseService, IUserService
         var response = await httpClient.GetAsync(url);
         EnsureSuccessfullStatusCode(response);
 
-        var apiResult = JsonConvert.DeserializeObject<ApiResult<string>>(await response.Content.ReadAsStringAsync());
+        var apiResult = await this.DeserializeObjectAsync<string>(response);
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
         {

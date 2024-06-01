@@ -34,7 +34,7 @@ public class ProductService : BaseService, IProductService
 
         this.EnsureSuccessfullStatusCode(response);
 
-        var apiResult = JsonConvert.DeserializeObject<ApiResult<PagingResult<Product>>>(await response.Content.ReadAsStringAsync());
+        var apiResult = await this.DeserializeObjectAsync<PagingResult<Product>>(response);
 
         if (apiResult.StatusCode == nameof(StatusCodes.Status200OK))
         {

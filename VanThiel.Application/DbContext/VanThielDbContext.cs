@@ -20,5 +20,7 @@ public class VanThielDbContext : DbContext
     public DbSet<Product> Products { get; set; }
 
     public DbSet<User> Users { get; set; }
+
+    public DbSet<Cart> Carts { get; set; }
     #endregion
 }

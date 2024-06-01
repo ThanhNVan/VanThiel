@@ -6,12 +6,14 @@ public class RepositoryContext
     public RepositoryContext(IOrderDetailRepository orderDetail,
                                 IOrderRepository order,
                                 IProductRepository product,
-                                IUserRepository user)
+                                IUserRepository user,
+                                ICartRepository cart)
     {
         OrderDetail = orderDetail;
         Order = order;
         Product = product;
         User = user;
+        Cart = cart;
     }
 
     #endregion
@@ -21,5 +23,6 @@ public class RepositoryContext
     public IOrderRepository Order { get; }
     public IProductRepository Product { get; }
     public IUserRepository User { get; }
+    public ICartRepository Cart { get; }
     #endregion
 }

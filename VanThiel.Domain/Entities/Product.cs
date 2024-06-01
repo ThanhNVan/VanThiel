@@ -49,6 +49,10 @@ public class Product : BaseEntity
     [JsonIgnore]
     [InverseProperty("Product")]
     public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
+    
+    [JsonIgnore]
+    [InverseProperty("Product")]
+    public virtual ICollection<Cart>? Carts { get; set; }
     #endregion
 }
 

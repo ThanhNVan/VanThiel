@@ -1,10 +1,12 @@
 ﻿using Blazored.SessionStorage;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using VanThiel.Infrastructure.Blazor.Data;
+using VanThiel.SharedLibrary.Entity;
 
 namespace VanThiel.Infrastructure.Blazor.Service.Classes;
 
@@ -55,14 +57,21 @@ public abstract class BaseService
         return result;
     }
 
-    protected void EnsureSuccessfullStatusCode(HttpResponseMessage response)
+    protected void EnsureSuccessfullStatusCode(HttpResponseMessage? response)
     {
-        if (response.IsSuccessStatusCode)
+        if (response is null || !response.IsSuccessStatusCode)
         {
-            return;
+            throw new Exception("Something is wrong please try later.");
         }
 
-        throw new Exception("Something is wrong please try later.");
+        return;
+    }
+
+    protected async ValueTask<ApiResult<TType>> DeserializeObjectAsync<TType>(HttpResponseMessage response)
+        where TType : class
+    {
+        var apiResult = JsonConvert.DeserializeObject<ApiResult<TType>>(await response.Content.ReadAsStringAsync());
+        return apiResult;
     }
     #endregion
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VanThiel.Application.Repositories.DatabaseContext;
 
@@ -11,9 +12,11 @@ using VanThiel.Application.Repositories.DatabaseContext;
 namespace VanThiel.Application.Repositories.Migrations
 {
     [DbContext(typeof(VanThielDbContext))]
-    partial class VanThielDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240601104821_addedCartTable")]
+    partial class addedCartTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,18 +51,11 @@ namespace VanThiel.Application.Repositories.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carts");
+                    b.ToTable("Cart");
                 });
 
             modelBuilder.Entity("VanThiel.Domain.Entities.Order", b =>
@@ -245,15 +241,7 @@ namespace VanThiel.Application.Repositories.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("VanThiel.Domain.Entities.User", "User")
-                        .WithMany("Carts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("VanThiel.Domain.Entities.Order", b =>
@@ -300,8 +288,6 @@ namespace VanThiel.Application.Repositories.Migrations
 
             modelBuilder.Entity("VanThiel.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Carts");
-
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
