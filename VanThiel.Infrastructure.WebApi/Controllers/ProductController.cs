@@ -5,6 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using VanThiel.Application.Repositories;
+using VanThiel.Core.ExceptionClasses;
 using VanThiel.Core.Services;
 using VanThiel.Domain.Entities;
 using VanThiel.Infrastructure.WebApi.Base;
@@ -38,11 +39,18 @@ public class ProductController : BaseVanThielController<Product, IProductService
     #endregion
 
     #region [ Public Method - Post ]
-    [Authorize]
-    [Obsolete]
     [HttpPost]
-    public async ValueTask<IActionResult> AddDemoProductDataAsync(int value, CancellationToken cancellation = default)
+    public async ValueTask<IActionResult> AddDemoProductDataAsync(int value,string password, CancellationToken cancellation = default)
     {
+        if (password != "123")
+        {
+            throw new UnauthorizedException("Not authorized.");
+        }
+
+        if (value > 100 || value < 1)
+        {
+            throw new ArgumentException("Value should be between 1 and 100.");
+        }
 
         var productList = DataGenerator.Current.CreateData(value);
         var result = await this._service.AddManyAsync(productList);
