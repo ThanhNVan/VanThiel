@@ -25,6 +25,7 @@ public class Program
         builder.Services.AddHttpClientProviders(builder.Configuration);
         builder.Services.AddAuthenticationPolicies(builder.Configuration);
         builder.Services.AddAuthorization();
+        builder.Services.AddHttpContextAccessor();
 
         //If you're running your application on Blazor Server, make sure a default HttpClient is registered before the AddFluentUIComponents method.
         builder.Services.AddFluentUIComponents();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -28,7 +29,8 @@ public static class ServiceEntensions
         services.AddTransient<IProductService, ProductService>();
         services.AddTransient<ICartService, CartService>();
         services.AddTransient<IOrderService, OrderService>();
-        services.AddTransient<JwtSecurityTokenHandler>();
+        services.AddTransient<JwtSecurityTokenHandler>(); 
+        services.AddScoped<HttpContextAccessor>();
 
         //services.AddTransient<HttpClientContext>();
     }

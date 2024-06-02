@@ -1,5 +1,9 @@
 ﻿@using System.Security.Claims;
+@using Microsoft.AspNetCore.Http
+@using VanThiel.Domain.DTOs.ReturnModel
 @inherits LayoutComponentBase
+@inject IHttpContextAccessor HttpContextAccessor
+@inject NavigationManager NavigationManager
 
 <PageTitle>Van Thiel</PageTitle>
 
@@ -18,10 +22,21 @@
         <CascadingAuthenticationState>
             <AuthorizeView>
                 <Authorized>
-                    <div class="top-row px-4">
+                    <FluentStack HorizontalAlignment="@HorizontalAlignment.End"
+                                 VerticalAlignment="@VerticalAlignment.Center"
+                                 Style="height: 48px; background: var(--neutral-layer-4); padding-inline-end: 10px; ">
                         <FluentMessageBarProvider Section="MESSAGES_TOP" />
-                        <span class="oi oi-person" aria-hidden="true"> Hello<a>@UserDisplayName(context.User.Claims)</a></span>
-                    </div>
+                        <FluentProfileMenu Image="https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+                                           Status="@PresenceStatus.Available"
+                                           HeaderLabel="User"
+                                           Initials="BG"
+                                           FullName="@GetUserInfo(context.User.Claims , "FullName")"
+                                           EMail="@GetUserInfo(context.User.Claims , "Email")"
+                                           Style="min-width: 330px;" 
+                                           OnHeaderButtonClick="() => Logout()"
+                                           OnFooterLinkClick="() => MyProfile()"
+                                           />
+                    </FluentStack>
                     <article class="content px-4">
                         @Body
                     </article>
@@ -36,11 +51,23 @@
 </div>
 
 @code {
-    private string UserDisplayName(IEnumerable<Claim> claims)
+        
+    private string GetUserInfo(IEnumerable<Claim> claims, string claimValue)
     {
-        var name = claims.FirstOrDefault(x => x.Type == "FullName").Value;
+        
 
-        return name;
+        var  fullname = claims.FirstOrDefault(x => x.Type == $"{claimValue}").Value;
+
+        return fullname;
+    }
+
+    private  void Logout()
+    {
+        this.NavigationManager.NavigateTo("/logout");
     }
     
+    private  void MyProfile()
+    {
+        this.NavigationManager.NavigateTo("/my-profile");
+    }
 }

@@ -77,6 +77,7 @@ public class OrderRepository : BaseVanThielRepository<Order>, IOrderRepository
                             TotalPrice = x.TotalPrice,
                             PaymentStatus = x.PaymentStatus,
                             ShippingStatus = x.ShippingStatus,
+                            CreatedAt = x.CreatedAt,
                             Details = x.OrderDetails.Where(x => x.IsActive)
                                             .Select(d => new OrderDetailInfo 
                                             { 
@@ -102,24 +103,22 @@ public class OrderRepository : BaseVanThielRepository<Order>, IOrderRepository
     public async ValueTask<bool> Create_TransactionAsync(IEnumerable<CartInfo> cartInfos, string userId, CancellationToken cancellationToken = default)
     {
         using var dbContext = await this.GetDbContextAsync(cancellationToken);
-        var order = new Order 
-        { 
-            UserId = userId,
-            PaymentStatus = PaymentStatus.Pending,
-            ShippingStatus = ShippingStatus.None,
-        };
+        var order = new Order();
+        order.UserId = userId;
+        order.PaymentStatus = PaymentStatus.Pending;
+        order.ShippingStatus = ShippingStatus.None;
+        
 
         var productList = new List<Product>();
         var cartList = new List<Cart>();
         var orderDetailList = new List<OrderDetail>();
         foreach (var cartInfo in cartInfos) {
-            var orderDetail = new OrderDetail
-            {
-                OrderId = order.Id,
-                ProductId = cartInfo.ProductId,
-                Quantity = cartInfo.ProductInCart,
-                TotalPrice = cartInfo.Price * (100 - cartInfo.Discount) * cartInfo.ProductInCart,
-            };
+            var orderDetail = new OrderDetail ();
+            orderDetail.OrderId = order.Id;
+            orderDetail.ProductId = cartInfo.ProductId;
+            orderDetail.Quantity = cartInfo.ProductInCart;
+            orderDetail.TotalPrice = cartInfo.Price * (100 - cartInfo.Discount) * cartInfo.ProductInCart;
+            
             orderDetailList.Add(orderDetail);
 
             var product = await dbContext.Products.FindAsync(cartInfo.ProductId, cancellationToken);

@@ -50,6 +50,7 @@ public class OrderService : BaseVanThielService<Order, IOrderRepository>, IOrder
 
         var userId = identity.FindFirst("UserId").Value;
         GuardParametter.IsValidJwtClaim(userId);
+        GuardParametter.IEnumerableIsNullOrEmpty(cartIdList);
         var cartInforList = await this._cartRepository.Validate_ProductInCartAsync(userId, cartIdList, cancellationToken);
 
         return await this._repository.Create_TransactionAsync(cartInforList, userId, cancellationToken);

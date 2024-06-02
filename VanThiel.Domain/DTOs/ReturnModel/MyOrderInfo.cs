@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using VanThiel.Domain.Enums;
 
 namespace VanThiel.Domain.DTOs.ReturnModel;
@@ -22,5 +23,7 @@ public class MyOrderInfo
     public ShippingStatus ShippingStatus { get; set; }
 
     public IEnumerable<OrderDetailInfo> Details { get; set; }
+
+    public DateTime CreatedAt { get; set; }
     #endregion
 }
