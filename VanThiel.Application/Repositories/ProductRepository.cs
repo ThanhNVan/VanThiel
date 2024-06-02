@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +35,13 @@ public class ProductRepository : BaseVanThielRepository<Product>, IProductReposi
     #endregion
 
     #region [ Public Method - Create ]
+    public async override ValueTask<bool> AddManyAsync(IEnumerable<Product> entityList, CancellationToken cancellationToken = default)
+    {
+        using var dbContext = await GetDbContextAsync(cancellationToken);
+        await dbContext.Database.EnsureCreatedAsync();
+
+        return await base.AddManyAsync(entityList, cancellationToken);
+    }
     #endregion
 
     #region [ Public Method - Update ]

@@ -44,6 +44,7 @@ public class OrderRepository : BaseVanThielRepository<Order>, IOrderRepository
                             TotalPrice = x.TotalPrice,
                             PaymentStatus = x.PaymentStatus,
                             ShippingStatus = x.ShippingStatus,
+                            CreatedAt = x.CreatedAt,
                             Details = x.OrderDetails.Where(x => x.IsActive)
                                             .Select(d => new OrderDetailInfo 
                                             { 
@@ -80,6 +81,7 @@ public class OrderRepository : BaseVanThielRepository<Order>, IOrderRepository
                             TotalPrice = x.TotalPrice,
                             PaymentStatus = x.PaymentStatus,
                             ShippingStatus = x.ShippingStatus,
+                            CreatedAt = x.CreatedAt,
                             Details = x.OrderDetails.Where(x => x.IsActive)
                                             .Select(d => new OrderDetailInfo 
                                             { 
@@ -150,7 +152,7 @@ public class OrderRepository : BaseVanThielRepository<Order>, IOrderRepository
         var cartList = new List<Cart>();
         var orderDetailList = new List<OrderDetail>();
         foreach (var cartInfo in cartInfos) {
-            var orderDetail = new OrderDetail ();
+            var orderDetail = new OrderDetail();
             orderDetail.OrderId = order.Id;
             orderDetail.ProductId = cartInfo.ProductId;
             orderDetail.Quantity = cartInfo.ProductInCart;
