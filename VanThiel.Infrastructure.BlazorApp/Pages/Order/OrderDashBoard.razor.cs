@@ -37,6 +37,7 @@ public partial class OrderDashBoard
     #region [ Methods ]
     public void MoveToOrderDetailPage(string orderId)
     {
+        NavigationManager.NavigateTo($"order-dashboard/{orderId}");
         return;
     }
     #endregion

@@ -1,0 +1,31 @@
+﻿@page "/order-dashboard/{OrderId}"
+@using VanThiel.Domain.DTOs.ReturnModel
+@using VanThiel.Domain.Enums
+
+@namespace VanThiel.Infrastructure.Blazor.Pages
+
+<PageTitle>Order</PageTitle>
+<h3 style="text-align:center">Order </h3>
+
+@if (OrderInfo is not null)
+{
+    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center">
+        <FluentTextField ReadOnly="true" Label="User" @bind-Value="OrderInfo.UserName" />
+        <FluentTextField ReadOnly="true" Label="Total Price" Value="@OrderInfo.TotalPrice.ToString()" />
+        <FluentTextField ReadOnly="true" Label="Payment Status" Value="@Enum.GetName(typeof(PaymentStatus), OrderInfo.PaymentStatus)" />
+        <FluentTextField ReadOnly="true" Label="Shipping Status" Value="@Enum.GetName(typeof(ShippingStatus), OrderInfo.ShippingStatus)" />
+        <FluentDatePicker ReadOnly="true" Label="Created At" Value="@OrderInfo.CreatedAt" />
+    </FluentStack>
+
+    <div class="grid" style="width: 100%; overflow-x:auto;">
+        <FluentDataGrid Items="@Data" Style="width: 1300px;" ShowHover="true">
+            <PropertyColumn Property="@(c => c.ProductName)" Sortable="true" Class="country-name" />
+            <PropertyColumn Property="@(c => c.Category)" Sortable="true" Class="country-name" />
+            <PropertyColumn Property="@(c => c.Discount)" Sortable="true" Class="country-name" />
+            <PropertyColumn Property="@(c => c.Quantity)" Sortable="true" Align="Align.End" />
+            <PropertyColumn Property="@(c => c.TotalPrice)" Sortable="true" Align="Align.End" />
+        </FluentDataGrid>
+
+    </div>
+
+}

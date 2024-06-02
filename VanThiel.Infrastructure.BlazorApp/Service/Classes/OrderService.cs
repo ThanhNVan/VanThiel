@@ -21,9 +21,23 @@ public class OrderService : BaseService, IOrderService
     #endregion
 
     #region [ Public Method - Get ]
+    public async ValueTask<OrderInfo> GetSingle_InfoByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var url = this._entityUrl + $"/single/{id}";
+
+        var httpClient = await this.CreateClientAsync();
+
+        var response = await httpClient.GetAsync(url, cancellationToken);
+
+        this.EnsureSuccessfulStatusCode(response);
+
+        var apiResult = await this.DeserializeObjectAsync<OrderInfo>(response);
+
+        return this.EnsureCustomSuccessStatusCode(apiResult);
+    }
+
     public async ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
     {
-        var result = default(bool);
         var url = this._entityUrl + $"/many-active";
 
         var httpClient = await this.CreateClientAsync();

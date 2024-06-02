@@ -8,6 +8,8 @@ namespace VanThiel.Infrastructure.Blazor.Service.Interfaces;
 public interface IOrderService
 {
     #region [ Public Method - Get ]
+    ValueTask<OrderInfo> GetSingle_InfoByIdAsync(string id, CancellationToken cancellationToken = default);
+
     ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default);
 
     ValueTask<IEnumerable<MyOrderInfo>> GetMany_ByUserAsync(CancellationToken cancellationToken = default);

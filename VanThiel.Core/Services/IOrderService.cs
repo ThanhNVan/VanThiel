@@ -11,6 +11,8 @@ namespace VanThiel.Core.Services;
 public interface IOrderService : IBaseVanThielService<Order>
 {
     #region [ Public Method - Get ]
+    ValueTask<OrderInfo> GetSingle_InfoByIdAsync(string id, CancellationToken cancellationToken = default);
+
     ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default);
 
     ValueTask<IEnumerable<MyOrderInfo>> GetMany_ByUserAsync(ClaimsIdentity identity, CancellationToken cancellationToken = default);

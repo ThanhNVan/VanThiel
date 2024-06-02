@@ -24,6 +24,43 @@ public class OrderRepository : BaseVanThielRepository<Order>, IOrderRepository
     #endregion
 
     #region [ Public Method - Get Many ]
+    public async ValueTask<OrderInfo> GetSingle_InfoByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var result = new OrderInfo();
+
+        using var dbContext = await this.GetDbContextAsync(cancellationToken);
+
+        result = await dbContext.Orders
+                        .Include(x => x.User)
+                        .Include(x => x.OrderDetails)
+                            .ThenInclude(x => x.Product)
+                        .Where(x => x.IsActive
+                                    && x.Id == id)
+                        .Select(x => new OrderInfo 
+                        { 
+                            Id = x.Id,
+                            UserName = x.User.Fullname,
+                            UserId = x.UserId,
+                            TotalPrice = x.TotalPrice,
+                            PaymentStatus = x.PaymentStatus,
+                            ShippingStatus = x.ShippingStatus,
+                            Details = x.OrderDetails.Where(x => x.IsActive)
+                                            .Select(d => new OrderDetailInfo 
+                                            { 
+                                                Id = d.Id,
+                                                ProductId = d.ProductId,
+                                                ProductName = d.Product.Name,
+                                                Category = d.Product.Category,
+                                                Discount = d.Product.Discount,
+                                                Quantity = d.Quantity,
+                                                TotalPrice = d.TotalPrice.GetValueOrDefault(),
+                                            }).ToList()    
+                        })
+                        .FirstOrDefaultAsync(cancellationToken);
+
+        return result;
+    }
+    
     public async ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
     {
         var result = new List<OrderInfo>();

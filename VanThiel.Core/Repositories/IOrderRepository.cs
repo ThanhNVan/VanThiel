@@ -10,6 +10,8 @@ namespace VanThiel.Core.Repositories;
 public interface IOrderRepository: IBaseVanThielRepository<Order>
 {
     #region [ Public Method - Get Many ]
+    ValueTask<OrderInfo> GetSingle_InfoByIdAsync(string id, CancellationToken cancellationToken = default);
+
     ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default);
 
     ValueTask<IEnumerable<MyOrderInfo>> GetMany_ByUserAsync(string userId, CancellationToken cancellationToken = default);

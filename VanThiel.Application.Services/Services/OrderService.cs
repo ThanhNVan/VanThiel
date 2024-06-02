@@ -27,6 +27,12 @@ public class OrderService : BaseVanThielService<Order, IOrderRepository>, IOrder
     #endregion
 
     #region [ Public Method - Get ]
+    public ValueTask<OrderInfo> GetSingle_InfoByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        GuardParametter.StringIsNullOrEmpty(id);
+        return this._repository.GetSingle_InfoByIdAsync(id, cancellationToken);
+    }
+    
     public ValueTask<IEnumerable<OrderInfo>> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
     {
         return this._repository.GetMany_ActiveAsync(cancellationToken);

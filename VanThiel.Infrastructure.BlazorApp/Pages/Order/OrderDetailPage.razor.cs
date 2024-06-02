@@ -7,8 +7,13 @@ using VanThiel.Infrastructure.Blazor.Service.Interfaces;
 
 namespace VanThiel.Infrastructure.Blazor.Pages;
 
-public partial class MyOrderPage
+public partial class OrderDetailPage
 {
+    #region [ Properties ]
+    [Parameter]
+    public string OrderId { get; set; }
+    #endregion
+
     #region [ Properties - Inject ]
     [Inject]
     private NavigationManager NavigationManager { get; set; }
@@ -21,16 +26,17 @@ public partial class MyOrderPage
     #endregion
 
     #region [ Properties ]
-    public IQueryable<MyOrderInfo> Data { get; set; }
+    public OrderInfo OrderInfo { get; set; }
 
-    public PaginationState Pagination = new PaginationState { ItemsPerPage = 12 };
+    public IQueryable<OrderDetailInfo> Data { get; set; }
     #endregion
 
     #region [ Override Methods ]
     protected override async Task OnInitializedAsync()
     {
         MessageService.Clear();
-        this.Data = (await this.OrderService.GetMany_ByUserAsync()).AsQueryable();
+        this.OrderInfo = await this.OrderService.GetSingle_InfoByIdAsync(OrderId);
+        this.Data = this.OrderInfo.Details.AsQueryable();
     }
     #endregion
 

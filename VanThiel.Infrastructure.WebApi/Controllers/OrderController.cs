@@ -21,7 +21,7 @@ public class OrderController : BaseVanThielController<Order, IOrderService>
     }
     #endregion
 
-    #region [ Public Method - Get ]
+    #region [ Public Method - Post ]
     [Authorize(Roles = "User")]
     [HttpPost("check-out")]
     public async ValueTask<IActionResult> Post_CheckOutAsync([FromBody] IEnumerable<string> cartIdList, CancellationToken cancellationToken = default)
@@ -33,7 +33,16 @@ public class OrderController : BaseVanThielController<Order, IOrderService>
     }
     #endregion
 
-    #region [ Public Method - Post ]
+    #region [ Public Method - Get ]
+    [Authorize(Roles = "User")]
+    [HttpGet("single/{id}")]
+    public async ValueTask<IActionResult> GetSingle_InfoByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        var result = await this._service.GetSingle_InfoByIdAsync(id, cancellationToken);
+
+        return this.GetOkResult(result);
+    }
+
     [Authorize(Roles = "User")]
     [HttpGet("many-active")]
     public async ValueTask<IActionResult> GetMany_ActiveAsync(CancellationToken cancellationToken = default)
